@@ -1,0 +1,42 @@
+---
+title: "A2-KM"
+author: "Kylia Medeiros"
+date: "2024-09-12"
+output: html_document
+---
+
+```{r}
+# Problem 1:
+
+a <- 1
+d <- 3
+l <-100 
+n <- (l-a)/d +1 
+x <- n * (a + 1)/2 
+sum (x)
+```
+```{r}
+# Problem 2
+x <- c(1:100)
+sum (x^2)
+```
+```{r}
+# Problem 3
+x = 1:100
+y = 2:101
+sum(1/(x*y))
+
+
+```
+```{r}
+# Problem 4 
+x = 1:100
+y = 2:101
+z = 3: 102 
+sum(1/(x*y*z))
+```
+```{r}
+# Problem 5 
+x = seq(1, 101, by = 2)
+sum(x^x)
+```

@@ -1,0 +1,29 @@
+---
+title: "Assignment 1-KM"
+author: "Kylia Medeiros"
+date: "2024-09-05"
+output:
+  html_document: default
+  word_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Introduction
+
+This is my intro my analysis
+
+
+## This is my subheading
+This is my intro for my analysis. This is my intro for my analysis 
+
+## 1.1
+
+- Stats 421 
+- item 2 
+- item 3
+
+# MATH421 
+
