@@ -3,4 +3,4 @@
 
 [Assignment 1](Assignment1_StatsR.html)
 [Assignment 2](assignment2R.html)
-[Assignment 3](assignment3Rk2.html)
+[Assignment 3](assignment3RKM2.html)
