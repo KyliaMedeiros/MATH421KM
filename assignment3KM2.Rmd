@@ -185,14 +185,5 @@ cor(df2$Pclass, df2$Survived)
 by(df2$Survived, df2$Survived, FUN = mean)
 ```
 
--ifelse
-```{r}
-df$New_cases2 <- ifelse(df$New_cases==0, 
-                        'No_new_cases','Has_new_cases') 
-```
 
-```{r}
-library(dplyr)
-df$New_cases2 <- case_when(df$New_cases==0 ~ 'No_new_cases', 
-                            TRUE ~ 'Has_new_cases') 
-```
+
