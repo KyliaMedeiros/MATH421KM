@@ -1,0 +1,234 @@
+```{r}
+library(tidyverse)
+
+```
+
+```{r}
+df <- read_csv('https://covidtracking.com/data/download/all-states-history.csv') 
+```
+
+```{r}
+names(df)
+```
+```{r}
+library(lubridate)
+
+df <- df%>%
+  mutate(month = months(date),
+       weekday = wday(date),
+       monthday = mday(date))
+```
+
+
+```{r}
+df <- df %>% 
+mutate(daily_death = case_when(
+  df$deathIncrease < 3 ~ 'low',
+  df$deathIncrease >= 3 & df$deathIncrease <= 14 ~ 'medium',
+  TRUE ~'high'))
+```
+
+```{r}
+#df <- data.frame(day = c(1:31))
+
+df$month2 <- case_when(
+  df$monthday <= 10 ~ "early_month",
+  df$monthday > 10 & df$monthday <= 20 ~ "mid_month",
+  df$monthday > 20 ~ "end_month"
+)
+print(df)
+```
+
+```{r}
+df <- df %>%
+  mutate(weekend = ifelse(wday(date) %in% c(6, 7), 1, 0))
+```
+
+```{r}
+df %>% select(-totalTestsViral)
+```
+```{r}
+x <- c(1:10)
+result <- x %>%
+  sqrt() %>%
+  sum() %>%
+  
+sum(x) 
+### pipe
+x %>% sum
+```
+```{r}
+# square root of x
+sqrt(x)
+```
+```{r}
+x %>% sqrt
+```
+```{r}
+sqrt(sum(x))
+```
+```{r}
+x %>% sum %>% sqrt
+
+```
+```{r}
+#
+sum(sqrt(x))
+
+```
+```{r}
+x %>% sqrt %>% sum
+```
+```{r}
+log(sum(sqrt(x)))
+
+```
+```{r}
+log(sum(x))
+
+```
+```{r}
+# log base 2 of 16
+log(16, 2)
+```
+
+-7.)This combo is used when you want to apply a function/calculation to different groups of the data. For example, to calculate the aver age number of cases (positiveIncrease) by dataQualityGrade, we use:
+```{r}
+df %>% 
+  group_by(weekday) %>% ##change date to weekday at some point
+  summarise(mean(positiveIncrease))
+```
+-Calculate the median number of cases (positiveIncrease) by month
+```{r}
+df %>% 
+  group_by(month2) %>%
+  summarise(median(positiveIncrease))
+```
+-Calculate the average number of cases (positiveIncrease) by month2
+```{r}
+df%>%
+  group_by(month2) %>%
+  summarise(mean(positiveIncrease))
+```
+-Calculate the median number of cases (positiveIncrease) by weekend
+```{r}
+df %>%
+  group_by(weekend) %>%
+  summarise(median(positiveIncrease))
+```
+8. Combo 2: filter + group_by + summarise
+-An example: to calculate the average number of cases (positiveIncrease) in January and February separately, we use:
+```{r}
+df %>% 
+  filter(month == 'January'| month == 'February') %>% 
+  summarise(positve_increase = mean(positiveIncrease))
+```
+-Calculate the median number of cases (positiveIncrease) on the weekend by month in October and November 2020.
+```{r}
+df %>% 
+  filter(month == 'October'|month== 'November') %>% 
+  group_by(2020) %>% 
+  summarise(positve_increase = median(positiveIncrease))
+```
+-Calculate the average number of death at different periods of a month (month2 variable) in Fall 2020
+```{r}
+df %>% 
+  filter(month == 'October'| month == 'November' | month == 'December') %>% 
+  group_by(2020) %>% 
+  summarise(number_of_deaths = mean(death))
+```
+-Compare the average number of hospitalizations between weekdays and weekends in Summer 2020
+
+9. Combo 3: filter + group_by + summarise + arrange
+-Use the arrange function to find a month that has the highest number of deaths on the weekend.
+```{r}
+df %>% 
+  filter(month == 'October'| month == 'November' | month == 'December') %>% 
+  group_by(weekend) %>% 
+    group_by(weekday) %>% 
+        group_by(month) %>% 
+  summarise(number_of_deaths = mean(death)) %>% 
+arrange(-number_of_deaths)
+```
+
+
+
+```{r}
+library(tidyverse)
+df2=read_csv ("titanic.csv")
+```
+
+
+```{r}
+df2 %>% select(Survived)
+```
+```{r}
+df2 %>% filter(Survived==0)
+```
+
+
+```{r}
+df2 %>% mutate(Passengerld = Survived - Age)
+```
+
+
+
+```{r}
+df2 %>% arrange(Survived)
+
+```
+
+```{r}
+df2 %>% summarise(Survived = mean(Survived, na.rm=TRUE))
+
+
+```
+
+```{r}
+df2 %>% summarise(mean_death = mean(Survived, na.rm=TRUE), 
+                 median_cases=median(Age, na.rm=TRUE), 
+                 max_death=max(Survived, na.rm=TRUE))
+## # A tibble: 1 x 3
+```
+```{r}
+df2 %>% count(Sex)
+```
+```{r}
+df2 %>% 
+  group_by(Sex) %>% 
+  summarise(Survived = mean(Survived))
+```
+
+
+```{r}
+df2 %>% 
+  count(Pclass) %>% 
+  arrange(-n)
+```
+
+
+```{r}
+df2 %>% 
+  filter(Survived==0) %>% 
+  group_by(Sex) %>% 
+  summarise(survived = mean(Survived))
+  
+```
+
+```{r}
+df2 %>% 
+  filter(Survived==0) %>% 
+  group_by(Sex) %>% 
+  summarise(survived = mean(Survived)) %>% 
+  arrange(-survived)
+
+```
+
+```{r}
+
+df2 %>% 
+  filter(Sex =='female') %>% 
+  count(Pclass) %>% 
+  arrange(-n)
+```
+

@@ -11,7 +11,7 @@
 
 
 
-<title>README</title>
+<title>assignment4R.knit</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -352,16 +352,393 @@ display: none;
 </div>
 
 
-<div id="math421km" class="section level1">
-<h1>Math421KM</h1>
-</div>
-<div id="kylia-medeiros" class="section level1">
-<h1>Kylia Medeiros</h1>
-<p><a href="Assignment1_StatsR.html">Assignment 1</a></p>
-<p><a href="assignment2R.html">Assignment 2</a></p>
-<p><a href="assignment3KM2.html">Assignment 3</a></p>
-<p><a href="assignment4R.html">Assignment 4</a></p>
-</div>
+<pre class="r"><code>library(tidyverse)</code></pre>
+<pre><code>## Warning: package &#39;tidyverse&#39; was built under R version 4.3.3</code></pre>
+<pre><code>## Warning: package &#39;ggplot2&#39; was built under R version 4.3.3</code></pre>
+<pre><code>## Warning: package &#39;tibble&#39; was built under R version 4.3.3</code></pre>
+<pre><code>## Warning: package &#39;tidyr&#39; was built under R version 4.3.3</code></pre>
+<pre><code>## Warning: package &#39;readr&#39; was built under R version 4.3.3</code></pre>
+<pre><code>## Warning: package &#39;purrr&#39; was built under R version 4.3.3</code></pre>
+<pre><code>## Warning: package &#39;forcats&#39; was built under R version 4.3.3</code></pre>
+<pre><code>## Warning: package &#39;lubridate&#39; was built under R version 4.3.3</code></pre>
+<pre><code>## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+## ✔ dplyr     1.1.4     ✔ readr     2.1.5
+## ✔ forcats   1.0.0     ✔ stringr   1.5.1
+## ✔ ggplot2   3.5.0     ✔ tibble    3.2.1
+## ✔ lubridate 1.9.3     ✔ tidyr     1.3.1
+## ✔ purrr     1.0.2     
+## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+## ✖ dplyr::filter() masks stats::filter()
+## ✖ dplyr::lag()    masks stats::lag()
+## ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+<pre class="r"><code>df &lt;- read_csv(&#39;https://covidtracking.com/data/download/all-states-history.csv&#39;) </code></pre>
+<pre><code>## Warning: One or more parsing issues, call `problems()` on your data frame for details,
+## e.g.:
+##   dat &lt;- vroom(...)
+##   problems(dat)</code></pre>
+<pre><code>## Rows: 20780 Columns: 41
+## ── Column specification ────────────────────────────────────────────────────────
+## Delimiter: &quot;,&quot;
+## chr   (1): state
+## dbl  (37): death, deathConfirmed, deathIncrease, deathProbable, hospitalized...
+## lgl   (2): negativeTestsPeopleAntibody, positiveTestsPeopleAntibody
+## date  (1): date
+## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<pre class="r"><code>names(df)</code></pre>
+<pre><code>##  [1] &quot;date&quot;                             &quot;state&quot;                           
+##  [3] &quot;death&quot;                            &quot;deathConfirmed&quot;                  
+##  [5] &quot;deathIncrease&quot;                    &quot;deathProbable&quot;                   
+##  [7] &quot;hospitalized&quot;                     &quot;hospitalizedCumulative&quot;          
+##  [9] &quot;hospitalizedCurrently&quot;            &quot;hospitalizedIncrease&quot;            
+## [11] &quot;inIcuCumulative&quot;                  &quot;inIcuCurrently&quot;                  
+## [13] &quot;negative&quot;                         &quot;negativeIncrease&quot;                
+## [15] &quot;negativeTestsAntibody&quot;            &quot;negativeTestsPeopleAntibody&quot;     
+## [17] &quot;negativeTestsViral&quot;               &quot;onVentilatorCumulative&quot;          
+## [19] &quot;onVentilatorCurrently&quot;            &quot;positive&quot;                        
+## [21] &quot;positiveCasesViral&quot;               &quot;positiveIncrease&quot;                
+## [23] &quot;positiveScore&quot;                    &quot;positiveTestsAntibody&quot;           
+## [25] &quot;positiveTestsAntigen&quot;             &quot;positiveTestsPeopleAntibody&quot;     
+## [27] &quot;positiveTestsPeopleAntigen&quot;       &quot;positiveTestsViral&quot;              
+## [29] &quot;recovered&quot;                        &quot;totalTestEncountersViral&quot;        
+## [31] &quot;totalTestEncountersViralIncrease&quot; &quot;totalTestResults&quot;                
+## [33] &quot;totalTestResultsIncrease&quot;         &quot;totalTestsAntibody&quot;              
+## [35] &quot;totalTestsAntigen&quot;                &quot;totalTestsPeopleAntibody&quot;        
+## [37] &quot;totalTestsPeopleAntigen&quot;          &quot;totalTestsPeopleViral&quot;           
+## [39] &quot;totalTestsPeopleViralIncrease&quot;    &quot;totalTestsViral&quot;                 
+## [41] &quot;totalTestsViralIncrease&quot;</code></pre>
+<pre class="r"><code>library(lubridate)
+
+df &lt;- df%&gt;%
+  mutate(month = months(date),
+       weekday = wday(date),
+       monthday = mday(date))</code></pre>
+<pre class="r"><code>df &lt;- df %&gt;% 
+mutate(daily_death = case_when(
+  df$deathIncrease &lt; 3 ~ &#39;low&#39;,
+  df$deathIncrease &gt;= 3 &amp; df$deathIncrease &lt;= 14 ~ &#39;medium&#39;,
+  TRUE ~&#39;high&#39;))</code></pre>
+<pre class="r"><code>#df &lt;- data.frame(day = c(1:31))
+
+df$month2 &lt;- case_when(
+  df$monthday &lt;= 10 ~ &quot;early_month&quot;,
+  df$monthday &gt; 10 &amp; df$monthday &lt;= 20 ~ &quot;mid_month&quot;,
+  df$monthday &gt; 20 ~ &quot;end_month&quot;
+)
+print(df)</code></pre>
+<pre><code>## # A tibble: 20,780 × 46
+##    date       state death deathConfirmed deathIncrease deathProbable
+##    &lt;date&gt;     &lt;chr&gt; &lt;dbl&gt;          &lt;dbl&gt;         &lt;dbl&gt;         &lt;dbl&gt;
+##  1 2021-03-07 AK      305             NA             0            NA
+##  2 2021-03-07 AL    10148           7963            -1          2185
+##  3 2021-03-07 AR     5319           4308            22          1011
+##  4 2021-03-07 AS        0             NA             0            NA
+##  5 2021-03-07 AZ    16328          14403             5          1925
+##  6 2021-03-07 CA    54124             NA           258            NA
+##  7 2021-03-07 CO     5989           5251             3           735
+##  8 2021-03-07 CT     7704           6327             0          1377
+##  9 2021-03-07 DC     1030             NA             0            NA
+## 10 2021-03-07 DE     1473           1337             9           136
+## # ℹ 20,770 more rows
+## # ℹ 40 more variables: hospitalized &lt;dbl&gt;, hospitalizedCumulative &lt;dbl&gt;,
+## #   hospitalizedCurrently &lt;dbl&gt;, hospitalizedIncrease &lt;dbl&gt;,
+## #   inIcuCumulative &lt;dbl&gt;, inIcuCurrently &lt;dbl&gt;, negative &lt;dbl&gt;,
+## #   negativeIncrease &lt;dbl&gt;, negativeTestsAntibody &lt;dbl&gt;,
+## #   negativeTestsPeopleAntibody &lt;lgl&gt;, negativeTestsViral &lt;dbl&gt;,
+## #   onVentilatorCumulative &lt;dbl&gt;, onVentilatorCurrently &lt;dbl&gt;, …</code></pre>
+<pre class="r"><code>df &lt;- df %&gt;%
+  mutate(weekend = ifelse(wday(date) %in% c(6, 7), 1, 0))</code></pre>
+<pre class="r"><code>df %&gt;% select(-totalTestsViral)</code></pre>
+<pre><code>## # A tibble: 20,780 × 46
+##    date       state death deathConfirmed deathIncrease deathProbable
+##    &lt;date&gt;     &lt;chr&gt; &lt;dbl&gt;          &lt;dbl&gt;         &lt;dbl&gt;         &lt;dbl&gt;
+##  1 2021-03-07 AK      305             NA             0            NA
+##  2 2021-03-07 AL    10148           7963            -1          2185
+##  3 2021-03-07 AR     5319           4308            22          1011
+##  4 2021-03-07 AS        0             NA             0            NA
+##  5 2021-03-07 AZ    16328          14403             5          1925
+##  6 2021-03-07 CA    54124             NA           258            NA
+##  7 2021-03-07 CO     5989           5251             3           735
+##  8 2021-03-07 CT     7704           6327             0          1377
+##  9 2021-03-07 DC     1030             NA             0            NA
+## 10 2021-03-07 DE     1473           1337             9           136
+## # ℹ 20,770 more rows
+## # ℹ 40 more variables: hospitalized &lt;dbl&gt;, hospitalizedCumulative &lt;dbl&gt;,
+## #   hospitalizedCurrently &lt;dbl&gt;, hospitalizedIncrease &lt;dbl&gt;,
+## #   inIcuCumulative &lt;dbl&gt;, inIcuCurrently &lt;dbl&gt;, negative &lt;dbl&gt;,
+## #   negativeIncrease &lt;dbl&gt;, negativeTestsAntibody &lt;dbl&gt;,
+## #   negativeTestsPeopleAntibody &lt;lgl&gt;, negativeTestsViral &lt;dbl&gt;,
+## #   onVentilatorCumulative &lt;dbl&gt;, onVentilatorCurrently &lt;dbl&gt;, …</code></pre>
+<pre class="r"><code>x &lt;- c(1:10)
+result &lt;- x %&gt;%
+  sqrt() %&gt;%
+  sum() %&gt;%
+  
+sum(x) 
+### pipe
+x %&gt;% sum</code></pre>
+<pre><code>## [1] 55</code></pre>
+<pre class="r"><code># square root of x
+sqrt(x)</code></pre>
+<pre><code>##  [1] 1.000000 1.414214 1.732051 2.000000 2.236068 2.449490 2.645751 2.828427
+##  [9] 3.000000 3.162278</code></pre>
+<pre class="r"><code>x %&gt;% sqrt</code></pre>
+<pre><code>##  [1] 1.000000 1.414214 1.732051 2.000000 2.236068 2.449490 2.645751 2.828427
+##  [9] 3.000000 3.162278</code></pre>
+<pre class="r"><code>sqrt(sum(x))</code></pre>
+<pre><code>## [1] 7.416198</code></pre>
+<pre class="r"><code>x %&gt;% sum %&gt;% sqrt</code></pre>
+<pre><code>## [1] 7.416198</code></pre>
+<pre class="r"><code>#
+sum(sqrt(x))</code></pre>
+<pre><code>## [1] 22.46828</code></pre>
+<pre class="r"><code>x %&gt;% sqrt %&gt;% sum</code></pre>
+<pre><code>## [1] 22.46828</code></pre>
+<pre class="r"><code>log(sum(sqrt(x)))</code></pre>
+<pre><code>## [1] 3.112104</code></pre>
+<pre class="r"><code>log(sum(x))</code></pre>
+<pre><code>## [1] 4.007333</code></pre>
+<pre class="r"><code># log base 2 of 16
+log(16, 2)</code></pre>
+<pre><code>## [1] 4</code></pre>
+<p>-7.)This combo is used when you want to apply a function/calculation
+to different groups of the data. For example, to calculate the aver age
+number of cases (positiveIncrease) by dataQualityGrade, we use:</p>
+<pre class="r"><code>df %&gt;% 
+  group_by(weekday) %&gt;% ##change date to weekday at some point
+  summarise(mean(positiveIncrease))</code></pre>
+<pre><code>## # A tibble: 7 × 2
+##   weekday `mean(positiveIncrease)`
+##     &lt;dbl&gt;                    &lt;dbl&gt;
+## 1       1                    1261.
+## 2       2                    1174.
+## 3       3                    1314.
+## 4       4                    1439.
+## 5       5                    1478.
+## 6       6                    1540.
+## 7       7                    1478.</code></pre>
+<p>-Calculate the median number of cases (positiveIncrease) by month</p>
+<pre class="r"><code>df %&gt;% 
+  group_by(month2) %&gt;%
+  summarise(median(positiveIncrease))</code></pre>
+<pre><code>## # A tibble: 3 × 2
+##   month2      `median(positiveIncrease)`
+##   &lt;chr&gt;                            &lt;dbl&gt;
+## 1 early_month                       426.
+## 2 end_month                         458 
+## 3 mid_month                         420</code></pre>
+<p>-Calculate the average number of cases (positiveIncrease) by
+month2</p>
+<pre class="r"><code>df%&gt;%
+  group_by(month2) %&gt;%
+  summarise(mean(positiveIncrease))</code></pre>
+<pre><code>## # A tibble: 3 × 2
+##   month2      `mean(positiveIncrease)`
+##   &lt;chr&gt;                          &lt;dbl&gt;
+## 1 early_month                    1416.
+## 2 end_month                      1342.
+## 3 mid_month                      1395.</code></pre>
+<p>-Calculate the median number of cases (positiveIncrease) by
+weekend</p>
+<pre class="r"><code>df %&gt;%
+  group_by(weekend) %&gt;%
+  summarise(median(positiveIncrease))</code></pre>
+<pre><code>## # A tibble: 2 × 2
+##   weekend `median(positiveIncrease)`
+##     &lt;dbl&gt;                      &lt;dbl&gt;
+## 1       0                        418
+## 2       1                        482</code></pre>
+<ol start="8" style="list-style-type: decimal">
+<li>Combo 2: filter + group_by + summarise -An example: to calculate the
+average number of cases (positiveIncrease) in January and February
+separately, we use:</li>
+</ol>
+<pre class="r"><code>df %&gt;% 
+  filter(month == &#39;January&#39;| month == &#39;February&#39;) %&gt;% 
+  summarise(positve_increase = mean(positiveIncrease))</code></pre>
+<pre><code>## # A tibble: 1 × 1
+##   positve_increase
+##              &lt;dbl&gt;
+## 1            2428.</code></pre>
+<p>-Calculate the median number of cases (positiveIncrease) on the
+weekend by month in October and November 2020.</p>
+<pre class="r"><code>df %&gt;% 
+  filter(month == &#39;October&#39;|month== &#39;November&#39;) %&gt;% 
+  group_by(2020) %&gt;% 
+  summarise(positve_increase = median(positiveIncrease))</code></pre>
+<pre><code>## # A tibble: 1 × 2
+##   `2020` positve_increase
+##    &lt;dbl&gt;            &lt;dbl&gt;
+## 1   2020             1068</code></pre>
+<p>-Calculate the average number of death at different periods of a
+month (month2 variable) in Fall 2020</p>
+<pre class="r"><code>df %&gt;% 
+  filter(month == &#39;October&#39;| month == &#39;November&#39; | month == &#39;December&#39;) %&gt;% 
+  group_by(2020) %&gt;% 
+  summarise(number_of_deaths = mean(death))</code></pre>
+<pre><code>## # A tibble: 1 × 2
+##   `2020` number_of_deaths
+##    &lt;dbl&gt;            &lt;dbl&gt;
+## 1   2020            4465.</code></pre>
+<p>-Compare the average number of hospitalizations between weekdays and
+weekends in Summer 2020</p>
+<ol start="9" style="list-style-type: decimal">
+<li>Combo 3: filter + group_by + summarise + arrange -Use the arrange
+function to find a month that has the highest number of deaths on the
+weekend.</li>
+</ol>
+<pre class="r"><code>df %&gt;% 
+  filter(month == &#39;October&#39;| month == &#39;November&#39; | month == &#39;December&#39;) %&gt;% 
+  group_by(weekend) %&gt;% 
+    group_by(weekday) %&gt;% 
+        group_by(month) %&gt;% 
+  summarise(number_of_deaths = mean(death)) %&gt;% 
+arrange(-number_of_deaths)</code></pre>
+<pre><code>## # A tibble: 3 × 2
+##   month    number_of_deaths
+##   &lt;chr&gt;               &lt;dbl&gt;
+## 1 December            5339.
+## 2 November            4290.
+## 3 October             3761.</code></pre>
+<pre class="r"><code>library(tidyverse)
+df2=read_csv (&quot;titanic.csv&quot;)</code></pre>
+<pre><code>## Rows: 891 Columns: 12
+## ── Column specification ────────────────────────────────────────────────────────
+## Delimiter: &quot;,&quot;
+## chr (5): Name, Sex, Ticket, Cabin, Embarked
+## dbl (7): PassengerId, Survived, Pclass, Age, SibSp, Parch, Fare
+## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<pre class="r"><code>df2 %&gt;% select(Survived)</code></pre>
+<pre><code>## # A tibble: 891 × 1
+##    Survived
+##       &lt;dbl&gt;
+##  1        0
+##  2        1
+##  3        1
+##  4        1
+##  5        0
+##  6        0
+##  7        0
+##  8        0
+##  9        1
+## 10        1
+## # ℹ 881 more rows</code></pre>
+<pre class="r"><code>df2 %&gt;% filter(Survived==0)</code></pre>
+<pre><code>## # A tibble: 549 × 12
+##    PassengerId Survived Pclass Name   Sex     Age SibSp Parch Ticket  Fare Cabin
+##          &lt;dbl&gt;    &lt;dbl&gt;  &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;  &lt;dbl&gt; &lt;chr&gt;
+##  1           1        0      3 Braun… male     22     1     0 A/5 2…  7.25 &lt;NA&gt; 
+##  2           5        0      3 Allen… male     35     0     0 373450  8.05 &lt;NA&gt; 
+##  3           6        0      3 Moran… male     NA     0     0 330877  8.46 &lt;NA&gt; 
+##  4           7        0      1 McCar… male     54     0     0 17463  51.9  E46  
+##  5           8        0      3 Palss… male      2     3     1 349909 21.1  &lt;NA&gt; 
+##  6          13        0      3 Saund… male     20     0     0 A/5. …  8.05 &lt;NA&gt; 
+##  7          14        0      3 Ander… male     39     1     5 347082 31.3  &lt;NA&gt; 
+##  8          15        0      3 Vestr… fema…    14     0     0 350406  7.85 &lt;NA&gt; 
+##  9          17        0      3 Rice,… male      2     4     1 382652 29.1  &lt;NA&gt; 
+## 10          19        0      3 Vande… fema…    31     1     0 345763 18    &lt;NA&gt; 
+## # ℹ 539 more rows
+## # ℹ 1 more variable: Embarked &lt;chr&gt;</code></pre>
+<pre class="r"><code>df2 %&gt;% mutate(Passengerld = Survived - Age)</code></pre>
+<pre><code>## # A tibble: 891 × 13
+##    PassengerId Survived Pclass Name   Sex     Age SibSp Parch Ticket  Fare Cabin
+##          &lt;dbl&gt;    &lt;dbl&gt;  &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;  &lt;dbl&gt; &lt;chr&gt;
+##  1           1        0      3 Braun… male     22     1     0 A/5 2…  7.25 &lt;NA&gt; 
+##  2           2        1      1 Cumin… fema…    38     1     0 PC 17… 71.3  C85  
+##  3           3        1      3 Heikk… fema…    26     0     0 STON/…  7.92 &lt;NA&gt; 
+##  4           4        1      1 Futre… fema…    35     1     0 113803 53.1  C123 
+##  5           5        0      3 Allen… male     35     0     0 373450  8.05 &lt;NA&gt; 
+##  6           6        0      3 Moran… male     NA     0     0 330877  8.46 &lt;NA&gt; 
+##  7           7        0      1 McCar… male     54     0     0 17463  51.9  E46  
+##  8           8        0      3 Palss… male      2     3     1 349909 21.1  &lt;NA&gt; 
+##  9           9        1      3 Johns… fema…    27     0     2 347742 11.1  &lt;NA&gt; 
+## 10          10        1      2 Nasse… fema…    14     1     0 237736 30.1  &lt;NA&gt; 
+## # ℹ 881 more rows
+## # ℹ 2 more variables: Embarked &lt;chr&gt;, Passengerld &lt;dbl&gt;</code></pre>
+<pre class="r"><code>df2 %&gt;% arrange(Survived)</code></pre>
+<pre><code>## # A tibble: 891 × 12
+##    PassengerId Survived Pclass Name   Sex     Age SibSp Parch Ticket  Fare Cabin
+##          &lt;dbl&gt;    &lt;dbl&gt;  &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;  &lt;dbl&gt; &lt;chr&gt;
+##  1           1        0      3 Braun… male     22     1     0 A/5 2…  7.25 &lt;NA&gt; 
+##  2           5        0      3 Allen… male     35     0     0 373450  8.05 &lt;NA&gt; 
+##  3           6        0      3 Moran… male     NA     0     0 330877  8.46 &lt;NA&gt; 
+##  4           7        0      1 McCar… male     54     0     0 17463  51.9  E46  
+##  5           8        0      3 Palss… male      2     3     1 349909 21.1  &lt;NA&gt; 
+##  6          13        0      3 Saund… male     20     0     0 A/5. …  8.05 &lt;NA&gt; 
+##  7          14        0      3 Ander… male     39     1     5 347082 31.3  &lt;NA&gt; 
+##  8          15        0      3 Vestr… fema…    14     0     0 350406  7.85 &lt;NA&gt; 
+##  9          17        0      3 Rice,… male      2     4     1 382652 29.1  &lt;NA&gt; 
+## 10          19        0      3 Vande… fema…    31     1     0 345763 18    &lt;NA&gt; 
+## # ℹ 881 more rows
+## # ℹ 1 more variable: Embarked &lt;chr&gt;</code></pre>
+<pre class="r"><code>df2 %&gt;% summarise(Survived = mean(Survived, na.rm=TRUE))</code></pre>
+<pre><code>## # A tibble: 1 × 1
+##   Survived
+##      &lt;dbl&gt;
+## 1    0.384</code></pre>
+<pre class="r"><code>df2 %&gt;% summarise(mean_death = mean(Survived, na.rm=TRUE), 
+                 median_cases=median(Age, na.rm=TRUE), 
+                 max_death=max(Survived, na.rm=TRUE))</code></pre>
+<pre><code>## # A tibble: 1 × 3
+##   mean_death median_cases max_death
+##        &lt;dbl&gt;        &lt;dbl&gt;     &lt;dbl&gt;
+## 1      0.384           28         1</code></pre>
+<pre class="r"><code>## # A tibble: 1 x 3</code></pre>
+<pre class="r"><code>df2 %&gt;% count(Sex)</code></pre>
+<pre><code>## # A tibble: 2 × 2
+##   Sex        n
+##   &lt;chr&gt;  &lt;int&gt;
+## 1 female   314
+## 2 male     577</code></pre>
+<pre class="r"><code>df2 %&gt;% 
+  group_by(Sex) %&gt;% 
+  summarise(Survived = mean(Survived))</code></pre>
+<pre><code>## # A tibble: 2 × 2
+##   Sex    Survived
+##   &lt;chr&gt;     &lt;dbl&gt;
+## 1 female    0.742
+## 2 male      0.189</code></pre>
+<pre class="r"><code>df2 %&gt;% 
+  count(Pclass) %&gt;% 
+  arrange(-n)</code></pre>
+<pre><code>## # A tibble: 3 × 2
+##   Pclass     n
+##    &lt;dbl&gt; &lt;int&gt;
+## 1      3   491
+## 2      1   216
+## 3      2   184</code></pre>
+<pre class="r"><code>df2 %&gt;% 
+  filter(Survived==0) %&gt;% 
+  group_by(Sex) %&gt;% 
+  summarise(survived = mean(Survived))</code></pre>
+<pre><code>## # A tibble: 2 × 2
+##   Sex    survived
+##   &lt;chr&gt;     &lt;dbl&gt;
+## 1 female        0
+## 2 male          0</code></pre>
+<pre class="r"><code>df2 %&gt;% 
+  filter(Survived==0) %&gt;% 
+  group_by(Sex) %&gt;% 
+  summarise(survived = mean(Survived)) %&gt;% 
+  arrange(-survived)</code></pre>
+<pre><code>## # A tibble: 2 × 2
+##   Sex    survived
+##   &lt;chr&gt;     &lt;dbl&gt;
+## 1 female        0
+## 2 male          0</code></pre>
+<pre class="r"><code>df2 %&gt;% 
+  filter(Sex ==&#39;female&#39;) %&gt;% 
+  count(Pclass) %&gt;% 
+  arrange(-n)</code></pre>
+<pre><code>## # A tibble: 3 × 2
+##   Pclass     n
+##    &lt;dbl&gt; &lt;int&gt;
+## 1      3   144
+## 2      1    94
+## 3      2    76</code></pre>
 
 
 
