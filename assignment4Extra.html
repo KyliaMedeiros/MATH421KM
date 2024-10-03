@@ -9,9 +9,11 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
+<meta name="author" content="Kylia Medeiros" />
 
+<meta name="date" content="2024-10-03" />
 
-<title>README</title>
+<title>assignment4Extra</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -348,21 +350,438 @@ display: none;
 
 
 
+<h1 class="title toc-ignore">assignment4Extra</h1>
+<h4 class="author">Kylia Medeiros</h4>
+<h4 class="date">2024-10-03</h4>
 
 </div>
 
 
-<div id="math421km" class="section level1">
-<h1>Math421KM</h1>
-</div>
-<div id="kylia-medeiros" class="section level1">
-<h1>Kylia Medeiros</h1>
-<p><a href="Assignment1_StatsR.html">Assignment 1</a></p>
-<p><a href="assignment2R.html">Assignment 2</a></p>
-<p><a href="assignment3KM2.html">Assignment 3</a></p>
-<p><a href="assignment4R.html">Assignment 4</a></p>
-<p><a href="assignment4Extra.html">Assignment4 Extra Credit</a></p>
-</div>
+<p>1.) List all the names of the columns of the data</p>
+<pre class="r"><code>library(tidyverse)</code></pre>
+<pre><code>## Warning: package &#39;tidyverse&#39; was built under R version 4.3.3</code></pre>
+<pre><code>## Warning: package &#39;ggplot2&#39; was built under R version 4.3.3</code></pre>
+<pre><code>## Warning: package &#39;tibble&#39; was built under R version 4.3.3</code></pre>
+<pre><code>## Warning: package &#39;tidyr&#39; was built under R version 4.3.3</code></pre>
+<pre><code>## Warning: package &#39;readr&#39; was built under R version 4.3.3</code></pre>
+<pre><code>## Warning: package &#39;purrr&#39; was built under R version 4.3.3</code></pre>
+<pre><code>## Warning: package &#39;forcats&#39; was built under R version 4.3.3</code></pre>
+<pre><code>## Warning: package &#39;lubridate&#39; was built under R version 4.3.3</code></pre>
+<pre><code>## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+## ✔ dplyr     1.1.4     ✔ readr     2.1.5
+## ✔ forcats   1.0.0     ✔ stringr   1.5.1
+## ✔ ggplot2   3.5.0     ✔ tibble    3.2.1
+## ✔ lubridate 1.9.3     ✔ tidyr     1.3.1
+## ✔ purrr     1.0.2     
+## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+## ✖ dplyr::filter() masks stats::filter()
+## ✖ dplyr::lag()    masks stats::lag()
+## ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+<pre class="r"><code>df &lt;- read_csv(&#39;imdb_top_1000.csv&#39;)</code></pre>
+<pre><code>## Rows: 1000 Columns: 16
+## ── Column specification ────────────────────────────────────────────────────────
+## Delimiter: &quot;,&quot;
+## chr (12): Poster_Link, Series_Title, Released_Year, Certificate, Runtime, Ge...
+## dbl  (3): IMDB_Rating, Meta_score, No_of_Votes
+## num  (1): Gross
+## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<p>2.) Which movies have the highest money earned (Gross)?</p>
+<pre class="r"><code>df %&gt;% 
+  arrange(-Gross)</code></pre>
+<pre><code>## # A tibble: 1,000 × 16
+##    Poster_Link  Series_Title Released_Year Certificate Runtime Genre IMDB_Rating
+##    &lt;chr&gt;        &lt;chr&gt;        &lt;chr&gt;         &lt;chr&gt;       &lt;chr&gt;   &lt;chr&gt;       &lt;dbl&gt;
+##  1 https://m.m… Star Wars: … 2015          U           138 min Acti…         7.9
+##  2 https://m.m… Avengers: E… 2019          UA          181 min Acti…         8.4
+##  3 https://m.m… Avatar       2009          UA          162 min Acti…         7.8
+##  4 https://m.m… Avengers: I… 2018          UA          149 min Acti…         8.4
+##  5 https://m.m… Titanic      1997          UA          194 min Dram…         7.8
+##  6 https://m.m… The Avengers 2012          UA          143 min Acti…         8  
+##  7 https://m.m… Incredibles… 2018          UA          118 min Anim…         7.6
+##  8 https://m.m… The Dark Kn… 2008          UA          152 min Acti…         9  
+##  9 https://m.m… Rogue One    2016          UA          133 min Acti…         7.8
+## 10 https://m.m… The Dark Kn… 2012          UA          164 min Acti…         8.4
+## # ℹ 990 more rows
+## # ℹ 9 more variables: Overview &lt;chr&gt;, Meta_score &lt;dbl&gt;, Director &lt;chr&gt;,
+## #   Star1 &lt;chr&gt;, Star2 &lt;chr&gt;, Star3 &lt;chr&gt;, Star4 &lt;chr&gt;, No_of_Votes &lt;dbl&gt;,
+## #   Gross &lt;dbl&gt;</code></pre>
+<p>3.)What is the lowest rating (IMDB_Rating)? List five movies have
+this lowest rating.</p>
+<pre class="r"><code>df %&gt;% 
+  arrange(IMDB_Rating)</code></pre>
+<pre><code>## # A tibble: 1,000 × 16
+##    Poster_Link  Series_Title Released_Year Certificate Runtime Genre IMDB_Rating
+##    &lt;chr&gt;        &lt;chr&gt;        &lt;chr&gt;         &lt;chr&gt;       &lt;chr&gt;   &lt;chr&gt;       &lt;dbl&gt;
+##  1 https://m.m… Dark Waters  2019          PG-13       126 min Biog…         7.6
+##  2 https://m.m… Searching    2018          U/A         102 min Dram…         7.6
+##  3 https://m.m… Once Upon a… 2019          A           161 min Come…         7.6
+##  4 https://m.m… Nelyubov     2017          R           127 min Drama         7.6
+##  5 https://m.m… The Florida… 2017          A           111 min Drama         7.6
+##  6 https://m.m… Just Mercy   2019          A           137 min Biog…         7.6
+##  7 https://m.m… Gifted       2017          PG-13       101 min Drama         7.6
+##  8 https://m.m… The Peanut … 2019          PG-13       97 min  Adve…         7.6
+##  9 https://m.m… Victoria     2015          &lt;NA&gt;        138 min Crim…         7.6
+## 10 https://m.m… Mustang      2015          PG-13       97 min  Drama         7.6
+## # ℹ 990 more rows
+## # ℹ 9 more variables: Overview &lt;chr&gt;, Meta_score &lt;dbl&gt;, Director &lt;chr&gt;,
+## #   Star1 &lt;chr&gt;, Star2 &lt;chr&gt;, Star3 &lt;chr&gt;, Star4 &lt;chr&gt;, No_of_Votes &lt;dbl&gt;,
+## #   Gross &lt;dbl&gt;</code></pre>
+<p>4.)Which year have the most number of movies released in the list?
+What is the total of money earned on that year?</p>
+<pre class="r"><code>df %&gt;% 
+  filter(Released_Year == 2014 ) %&gt;% 
+  group_by(Gross) %&gt;%
+  summary(df)</code></pre>
+<pre><code>##  Poster_Link        Series_Title       Released_Year      Certificate       
+##  Length:32          Length:32          Length:32          Length:32         
+##  Class :character   Class :character   Class :character   Class :character  
+##  Mode  :character   Mode  :character   Mode  :character   Mode  :character  
+##                                                                             
+##                                                                             
+##                                                                             
+##                                                                             
+##    Runtime             Genre            IMDB_Rating      Overview        
+##  Length:32          Length:32          Min.   :7.600   Length:32         
+##  Class :character   Class :character   1st Qu.:7.700   Class :character  
+##  Mode  :character   Mode  :character   Median :7.900   Mode  :character  
+##                                        Mean   :7.919                     
+##                                        3rd Qu.:8.100                     
+##                                        Max.   :8.600                     
+##                                                                          
+##    Meta_score       Director            Star1              Star2          
+##  Min.   : 60.00   Length:32          Length:32          Length:32         
+##  1st Qu.: 73.25   Class :character   Class :character   Class :character  
+##  Median : 76.00   Mode  :character   Mode  :character   Mode  :character  
+##  Mean   : 77.87                                                           
+##  3rd Qu.: 82.00                                                           
+##  Max.   :100.00                                                           
+##  NA&#39;s   :2                                                                
+##     Star3              Star4            No_of_Votes          Gross          
+##  Length:32          Length:32          Min.   :  32798   Min.   :   165520  
+##  Class :character   Class :character   1st Qu.: 105126   1st Qu.:  3220036  
+##  Mode  :character   Mode  :character   Median : 374247   Median : 35893537  
+##                                        Mean   : 412249   Mean   : 88891265  
+##                                        3rd Qu.: 614944   3rd Qu.:172385056  
+##                                        Max.   :1512360   Max.   :333176600  
+##                                                          NA&#39;s   :1</code></pre>
+<p>5.) What is the total money earned per movies on average?</p>
+<pre class="r"><code>df %&gt;% 
+  summarise(mean_gross = mean(Gross, na.rm=TRUE))</code></pre>
+<pre><code>## # A tibble: 1 × 1
+##   mean_gross
+##        &lt;dbl&gt;
+## 1  68034751.</code></pre>
+<p>6.) Calculate the average number of votes by year. Calculate the
+average number of votes of movies that have IMDB rating greater than
+9.</p>
+<pre class="r"><code>df %&gt;% 
+  group_by(Released_Year) %&gt;% 
+  summarise(votes = mean(No_of_Votes, na.rm = TRUE))</code></pre>
+<pre><code>## # A tibble: 100 × 2
+##    Released_Year   votes
+##    &lt;chr&gt;           &lt;dbl&gt;
+##  1 1920           57428 
+##  2 1921          113314 
+##  3 1922           88794 
+##  4 1924           41985 
+##  5 1925           77054.
+##  6 1926           81156 
+##  7 1927          103428.
+##  8 1928           38940.
+##  9 1930           57318 
+## 10 1931          125538 
+## # ℹ 90 more rows</code></pre>
+<p>7.)Calculate the average Meta score in 2020 of movies that have
+number of votes in the third quartile.</p>
+<pre class="r"><code>df %&gt;% 
+  filter(Released_Year == 2020 ) %&gt;% 
+  group_by(&#39;Meta_Score&#39;) %&gt;%
+  summary(df)</code></pre>
+<pre><code>##  Poster_Link        Series_Title       Released_Year      Certificate       
+##  Length:6           Length:6           Length:6           Length:6          
+##  Class :character   Class :character   Class :character   Class :character  
+##  Mode  :character   Mode  :character   Mode  :character   Mode  :character  
+##                                                                             
+##                                                                             
+##                                                                             
+##                                                                             
+##    Runtime             Genre            IMDB_Rating      Overview        
+##  Length:6           Length:6           Min.   :7.800   Length:6          
+##  Class :character   Class :character   1st Qu.:7.825   Class :character  
+##  Mode  :character   Mode  :character   Median :8.000   Mode  :character  
+##                                        Mean   :8.133                     
+##                                        3rd Qu.:8.475                     
+##                                        Max.   :8.600                     
+##                                                                          
+##    Meta_score      Director            Star1              Star2          
+##  Min.   :77.00   Length:6           Length:6           Length:6          
+##  1st Qu.:80.00   Class :character   Class :character   Class :character  
+##  Median :82.00   Mode  :character   Mode  :character   Mode  :character  
+##  Mean   :82.75                                                           
+##  3rd Qu.:84.75                                                           
+##  Max.   :90.00                                                           
+##  NA&#39;s   :2                                                               
+##     Star3              Star4            No_of_Votes         Gross    
+##  Length:6           Length:6           Min.   : 33931   Min.   : NA  
+##  Class :character   Class :character   1st Qu.: 55069   1st Qu.: NA  
+##  Mode  :character   Mode  :character   Median : 72594   Median : NA  
+##                                        Mean   : 84127   Mean   :NaN  
+##                                        3rd Qu.:106083   3rd Qu.: NA  
+##                                        Max.   :159171   Max.   : NA  
+##                                                         NA&#39;s   :6    
+##  &quot;Meta_Score&quot;      
+##  Length:6          
+##  Class :character  
+##  Mode  :character  
+##                    
+##                    
+##                    
+## </code></pre>
+<pre class="r"><code># Select only character columns
+df %&gt;% select_if(is.character)</code></pre>
+<pre><code>## # A tibble: 1,000 × 12
+##    Poster_Link     Series_Title Released_Year Certificate Runtime Genre Overview
+##    &lt;chr&gt;           &lt;chr&gt;        &lt;chr&gt;         &lt;chr&gt;       &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt;   
+##  1 https://m.medi… The Shawsha… 1994          A           142 min Drama Two imp…
+##  2 https://m.medi… The Godfath… 1972          A           175 min Crim… An orga…
+##  3 https://m.medi… The Dark Kn… 2008          UA          152 min Acti… When th…
+##  4 https://m.medi… The Godfath… 1974          A           202 min Crim… The ear…
+##  5 https://m.medi… 12 Angry Men 1957          U           96 min  Crim… A jury …
+##  6 https://m.medi… The Lord of… 2003          U           201 min Acti… Gandalf…
+##  7 https://m.medi… Pulp Fiction 1994          A           154 min Crim… The liv…
+##  8 https://m.medi… Schindler&#39;s… 1993          A           195 min Biog… In Germ…
+##  9 https://m.medi… Inception    2010          UA          148 min Acti… A thief…
+## 10 https://m.medi… Fight Club   1999          A           139 min Drama An inso…
+## # ℹ 990 more rows
+## # ℹ 5 more variables: Director &lt;chr&gt;, Star1 &lt;chr&gt;, Star2 &lt;chr&gt;, Star3 &lt;chr&gt;,
+## #   Star4 &lt;chr&gt;</code></pre>
+<pre class="r"><code># Calculate the median of all numeric columns
+df %&gt;% summarise_if(is.numeric, mean, na.rm=TRUE)</code></pre>
+<pre><code>## # A tibble: 1 × 4
+##   IMDB_Rating Meta_score No_of_Votes     Gross
+##         &lt;dbl&gt;      &lt;dbl&gt;       &lt;dbl&gt;     &lt;dbl&gt;
+## 1        7.95       78.0     273693. 68034751.</code></pre>
+<p>9.)We can use select_if to select columns satisfying a condition and
+use summarise_if to do calculation on columns satisfying a condition.
+Try the follows to understand these functions.</p>
+<pre class="r"><code># Select only character columns
+df %&gt;% select_if(is.character)</code></pre>
+<pre><code>## # A tibble: 1,000 × 12
+##    Poster_Link     Series_Title Released_Year Certificate Runtime Genre Overview
+##    &lt;chr&gt;           &lt;chr&gt;        &lt;chr&gt;         &lt;chr&gt;       &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt;   
+##  1 https://m.medi… The Shawsha… 1994          A           142 min Drama Two imp…
+##  2 https://m.medi… The Godfath… 1972          A           175 min Crim… An orga…
+##  3 https://m.medi… The Dark Kn… 2008          UA          152 min Acti… When th…
+##  4 https://m.medi… The Godfath… 1974          A           202 min Crim… The ear…
+##  5 https://m.medi… 12 Angry Men 1957          U           96 min  Crim… A jury …
+##  6 https://m.medi… The Lord of… 2003          U           201 min Acti… Gandalf…
+##  7 https://m.medi… Pulp Fiction 1994          A           154 min Crim… The liv…
+##  8 https://m.medi… Schindler&#39;s… 1993          A           195 min Biog… In Germ…
+##  9 https://m.medi… Inception    2010          UA          148 min Acti… A thief…
+## 10 https://m.medi… Fight Club   1999          A           139 min Drama An inso…
+## # ℹ 990 more rows
+## # ℹ 5 more variables: Director &lt;chr&gt;, Star1 &lt;chr&gt;, Star2 &lt;chr&gt;, Star3 &lt;chr&gt;,
+## #   Star4 &lt;chr&gt;</code></pre>
+<pre class="r"><code># Calculate the median of all numeric columns
+df %&gt;% summarise_if(is.numeric, mean, na.rm=TRUE)</code></pre>
+<pre><code>## # A tibble: 1 × 4
+##   IMDB_Rating Meta_score No_of_Votes     Gross
+##         &lt;dbl&gt;      &lt;dbl&gt;       &lt;dbl&gt;     &lt;dbl&gt;
+## 1        7.95       78.0     273693. 68034751.</code></pre>
+<p>-arrange</p>
+<pre class="r"><code>df %&gt;% arrange(Genre)</code></pre>
+<pre><code>## # A tibble: 1,000 × 16
+##    Poster_Link  Series_Title Released_Year Certificate Runtime Genre IMDB_Rating
+##    &lt;chr&gt;        &lt;chr&gt;        &lt;chr&gt;         &lt;chr&gt;       &lt;chr&gt;   &lt;chr&gt;       &lt;dbl&gt;
+##  1 https://m.m… The Dark Kn… 2012          UA          164 min Acti…         8.4
+##  2 https://m.m… Raiders of … 1981          A           115 min Acti…         8.4
+##  3 https://m.m… Batman Begi… 2005          UA          140 min Acti…         8.2
+##  4 https://m.m… Indiana Jon… 1989          U           127 min Acti…         8.2
+##  5 https://m.m… First Blood  1982          A           93 min  Acti…         7.7
+##  6 https://m.m… Aguirre, de… 1972          &lt;NA&gt;        95 min  Acti…         7.9
+##  7 https://m.m… Sholay       1975          U           204 min Acti…         8.2
+##  8 https://m.m… The General  1926          Passed      67 min  Acti…         8.1
+##  9 https://m.m… Bajrangi Bh… 2015          UA          163 min Acti…         8  
+## 10 https://m.m… Guardians o… 2014          UA          121 min Acti…         8  
+## # ℹ 990 more rows
+## # ℹ 9 more variables: Overview &lt;chr&gt;, Meta_score &lt;dbl&gt;, Director &lt;chr&gt;,
+## #   Star1 &lt;chr&gt;, Star2 &lt;chr&gt;, Star3 &lt;chr&gt;, Star4 &lt;chr&gt;, No_of_Votes &lt;dbl&gt;,
+## #   Gross &lt;dbl&gt;</code></pre>
+<p>-count</p>
+<pre class="r"><code>df %&gt;% count(Director)</code></pre>
+<pre><code>## # A tibble: 548 × 2
+##    Director                n
+##    &lt;chr&gt;               &lt;int&gt;
+##  1 Aamir Khan              1
+##  2 Aaron Sorkin            1
+##  3 Abdellatif Kechiche     1
+##  4 Abhishek Chaubey        1
+##  5 Abhishek Kapoor         1
+##  6 Adam Elliot             1
+##  7 Adam McKay              1
+##  8 Aditya Chopra           1
+##  9 Aditya Dhar             1
+## 10 Akira Kurosawa         10
+## # ℹ 538 more rows</code></pre>
+<p>-select</p>
+<pre class="r"><code>df %&gt;% select(Series_Title)</code></pre>
+<pre><code>## # A tibble: 1,000 × 1
+##    Series_Title                                 
+##    &lt;chr&gt;                                        
+##  1 The Shawshank Redemption                     
+##  2 The Godfather                                
+##  3 The Dark Knight                              
+##  4 The Godfather: Part II                       
+##  5 12 Angry Men                                 
+##  6 The Lord of the Rings: The Return of the King
+##  7 Pulp Fiction                                 
+##  8 Schindler&#39;s List                             
+##  9 Inception                                    
+## 10 Fight Club                                   
+## # ℹ 990 more rows</code></pre>
+<p>-mutate</p>
+<pre class="r"><code>df %&gt;% mutate(Runtime = IMDB_Rating - No_of_Votes)</code></pre>
+<pre><code>## # A tibble: 1,000 × 16
+##    Poster_Link  Series_Title Released_Year Certificate Runtime Genre IMDB_Rating
+##    &lt;chr&gt;        &lt;chr&gt;        &lt;chr&gt;         &lt;chr&gt;         &lt;dbl&gt; &lt;chr&gt;       &lt;dbl&gt;
+##  1 https://m.m… The Shawsha… 1994          A           -2.34e6 Drama         9.3
+##  2 https://m.m… The Godfath… 1972          A           -1.62e6 Crim…         9.2
+##  3 https://m.m… The Dark Kn… 2008          UA          -2.30e6 Acti…         9  
+##  4 https://m.m… The Godfath… 1974          A           -1.13e6 Crim…         9  
+##  5 https://m.m… 12 Angry Men 1957          U           -6.90e5 Crim…         9  
+##  6 https://m.m… The Lord of… 2003          U           -1.64e6 Acti…         8.9
+##  7 https://m.m… Pulp Fiction 1994          A           -1.83e6 Crim…         8.9
+##  8 https://m.m… Schindler&#39;s… 1993          A           -1.21e6 Biog…         8.9
+##  9 https://m.m… Inception    2010          UA          -2.07e6 Acti…         8.8
+## 10 https://m.m… Fight Club   1999          A           -1.85e6 Drama         8.8
+## # ℹ 990 more rows
+## # ℹ 9 more variables: Overview &lt;chr&gt;, Meta_score &lt;dbl&gt;, Director &lt;chr&gt;,
+## #   Star1 &lt;chr&gt;, Star2 &lt;chr&gt;, Star3 &lt;chr&gt;, Star4 &lt;chr&gt;, No_of_Votes &lt;dbl&gt;,
+## #   Gross &lt;dbl&gt;</code></pre>
+<p>-filter</p>
+<pre class="r"><code>df %&gt;% filter(Released_Year==2018)</code></pre>
+<pre><code>## # A tibble: 19 × 16
+##    Poster_Link  Series_Title Released_Year Certificate Runtime Genre IMDB_Rating
+##    &lt;chr&gt;        &lt;chr&gt;        &lt;chr&gt;         &lt;chr&gt;       &lt;chr&gt;   &lt;chr&gt;       &lt;dbl&gt;
+##  1 https://m.m… Capharnaüm   2018          A           126 min Drama         8.4
+##  2 https://m.m… Spider-Man:… 2018          U           117 min Anim…         8.4
+##  3 https://m.m… Avengers: I… 2018          UA          149 min Acti…         8.4
+##  4 https://m.m… Tumbbad      2018          A           104 min Dram…         8.3
+##  5 https://m.m… Andhadhun    2018          UA          139 min Crim…         8.3
+##  6 https://m.m… Uri: The Su… 2018          UA          138 min Acti…         8.2
+##  7 https://m.m… K.G.F: Chap… 2018          UA          156 min Acti…         8.2
+##  8 https://m.m… Green Book   2018          UA          130 min Biog…         8.2
+##  9 https://m.m… Badhaai ho   2018          UA          124 min Come…         8  
+## 10 https://m.m… Bohemian Rh… 2018          UA          134 min Biog…         8  
+## 11 https://m.m… Manbiki kaz… 2018          A           121 min Crim…         7.9
+## 12 https://m.m… Isle of Dogs 2018          U           101 min Anim…         7.9
+## 13 https://m.m… Raazi        2018          UA          138 min Acti…         7.8
+## 14 https://m.m… Roma         2018          R           135 min Drama         7.7
+## 15 https://m.m… Deadpool 2   2018          R           119 min Acti…         7.7
+## 16 https://m.m… Mission: Im… 2018          UA          147 min Acti…         7.7
+## 17 https://m.m… Searching    2018          U/A         102 min Dram…         7.6
+## 18 https://m.m… Incredibles… 2018          UA          118 min Anim…         7.6
+## 19 https://m.m… A Star Is B… 2018          UA          136 min Dram…         7.6
+## # ℹ 9 more variables: Overview &lt;chr&gt;, Meta_score &lt;dbl&gt;, Director &lt;chr&gt;,
+## #   Star1 &lt;chr&gt;, Star2 &lt;chr&gt;, Star3 &lt;chr&gt;, Star4 &lt;chr&gt;, No_of_Votes &lt;dbl&gt;,
+## #   Gross &lt;dbl&gt;</code></pre>
+<p>-summarise</p>
+<pre class="r"><code>df %&gt;% summarise(IMDB_Rating = mean(IMDB_Rating, na.rm=TRUE))</code></pre>
+<pre><code>## # A tibble: 1 × 1
+##   IMDB_Rating
+##         &lt;dbl&gt;
+## 1        7.95</code></pre>
+<p>-group_by and summarise</p>
+<pre class="r"><code>df %&gt;% 
+  group_by(Genre) %&gt;% 
+  summarise(IMDB_Rating = mean(IMDB_Rating))</code></pre>
+<pre><code>## # A tibble: 202 × 2
+##    Genre                        IMDB_Rating
+##    &lt;chr&gt;                              &lt;dbl&gt;
+##  1 Action, Adventure                   8.18
+##  2 Action, Adventure, Biography        7.9 
+##  3 Action, Adventure, Comedy           7.91
+##  4 Action, Adventure, Crime            7.6 
+##  5 Action, Adventure, Drama            8.15
+##  6 Action, Adventure, Family           7.6 
+##  7 Action, Adventure, Fantasy          8.2 
+##  8 Action, Adventure, History          7.9 
+##  9 Action, Adventure, Horror           7.9 
+## 10 Action, Adventure, Mystery          7.6 
+## # ℹ 192 more rows</code></pre>
+<p>-count and arange</p>
+<pre class="r"><code>df %&gt;% 
+  count(Genre) %&gt;% 
+  arrange(-n)</code></pre>
+<pre><code>## # A tibble: 202 × 2
+##    Genre                            n
+##    &lt;chr&gt;                        &lt;int&gt;
+##  1 Drama                           85
+##  2 Drama, Romance                  37
+##  3 Comedy, Drama                   35
+##  4 Comedy, Drama, Romance          31
+##  5 Action, Crime, Drama            30
+##  6 Biography, Drama, History       28
+##  7 Crime, Drama, Thriller          28
+##  8 Crime, Drama, Mystery           27
+##  9 Crime, Drama                    26
+## 10 Animation, Adventure, Comedy    24
+## # ℹ 192 more rows</code></pre>
+<p>-Filter, group_by, and summarise</p>
+<pre class="r"><code>df %&gt;% 
+  filter(Released_Year==2018) %&gt;% 
+  group_by(Genre) %&gt;% 
+  summarise(IMDB_Rating = mean(IMDB_Rating))</code></pre>
+<pre><code>## # A tibble: 17 × 2
+##    Genre                        IMDB_Rating
+##    &lt;chr&gt;                              &lt;dbl&gt;
+##  1 Action, Adventure, Comedy           7.7 
+##  2 Action, Adventure, Sci-Fi           8.4 
+##  3 Action, Adventure, Thriller         7.7 
+##  4 Action, Drama                       8.2 
+##  5 Action, Drama, Thriller             7.8 
+##  6 Action, Drama, War                  8.2 
+##  7 Animation, Action, Adventure        8   
+##  8 Animation, Adventure, Comedy        7.9 
+##  9 Biography, Comedy, Drama            8.2 
+## 10 Biography, Drama, Music             8   
+## 11 Comedy, Drama                       8   
+## 12 Crime, Drama                        7.9 
+## 13 Crime, Drama, Music                 8.3 
+## 14 Drama                               8.05
+## 15 Drama, Fantasy, Horror              8.3 
+## 16 Drama, Music, Romance               7.6 
+## 17 Drama, Mystery, Thriller            7.6</code></pre>
+<p>-Filter, count, and arrange</p>
+<pre class="r"><code>df %&gt;% 
+  filter(Released_Year==2019) %&gt;% 
+  count(Genre) %&gt;% 
+  arrange(-n)</code></pre>
+<pre><code>## # A tibble: 19 × 2
+##    Genre                            n
+##    &lt;chr&gt;                        &lt;int&gt;
+##  1 Animation, Adventure, Comedy     2
+##  2 Biography, Crime, Drama          2
+##  3 Comedy, Drama                    2
+##  4 Drama, Romance                   2
+##  5 Action, Adventure, Drama         1
+##  6 Action, Biography, Drama         1
+##  7 Action, Comedy, Crime            1
+##  8 Adventure, Biography, Drama      1
+##  9 Adventure, Comedy, Drama         1
+## 10 Biography, Drama, History        1
+## 11 Comedy, Crime, Drama             1
+## 12 Comedy, Drama, Romance           1
+## 13 Comedy, Drama, Thriller          1
+## 14 Comedy, Drama, War               1
+## 15 Crime, Drama, Thriller           1
+## 16 Drama                            1
+## 17 Drama, Music                     1
+## 18 Drama, Music, Romance            1
+## 19 Drama, Thriller, War             1</code></pre>
+<p>```</p>
 
 
 
