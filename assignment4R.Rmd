@@ -134,7 +134,7 @@ df %>%
 ```{r}
 df %>% 
   filter(month == 'October'| month == 'November' | month == 'December') %>% 
-  group_by(2020) %>% 
+  group_by(weekend) %>% 
   summarise(number_of_deaths = mean(death))
 ```
 -Compare the average number of hospitalizations between weekdays and weekends in Summer 2020

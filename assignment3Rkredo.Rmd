@@ -112,24 +112,22 @@ table(df$deaths3)
 
 # 13. Find the average cases in Rhode Island in 2021
 ```{r}
-df1 <- df[df$Date_report>='2021-01-01',]
-by(df1$New_cases, df1$WHO_region, mean)
+df1 <- df[df$Date>='2021-01-01',]
+by(df1$Cases, df1$State, mean)
 ```
 
 #14. Find the median cases by weekdays in Rhode Island in 2021 
 ```{r}
 df$weekdays <- weekdays(df$Date)
-df1 = df[df$state== 'Rhode Island',]
-by(df1$deaths,df1$weekdays, median)
+df1 = df[df$State== 'Rhode Island',]
+by(df1$Deaths,df1$weekdays, median)
 ```
 
 #15. Compare the median cases in Rhode Island in June, July, August and September in 2021. 
 ```{r}
-df$month = months(df$Date)
-```
-
-```{r}
-df1 = df[df$month %in% c('June' , 'July' , 'August', 'September') & (df$date >= '01-01-2021') & (df$date <= '12-31-2021') ,]
+library(lubridate)
+df$month = month(df$Date)
+df1 = df[(df$Date >= '2021-06-01') & (df$Date <= '2021-09-01') ,]
 by(df1$Cases, df1$month, median)
 ```
 
