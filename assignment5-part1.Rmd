@@ -1,0 +1,57 @@
+---
+title: "assignment 5-part 1"
+author: "Kylia Medeiros"
+date: "2024-10-08"
+output: html_document
+---
+-1.)Use read_csv to import the data. Show the number of NAs for each columns.
+
+```{r}
+library(tidyverse)
+df <- read_csv('https://bryantstats.github.io/math421/data/adult_census_missing.csv')
+na_count <- colSums(is.na(df))
+print(na_count)
+```
+2.)Using function aggr the VIM package to plot the number of NAs for each column.
+```{r}
+library(VIM)
+aggr(df, col = c("blue", "green"), number = TRUE, sortVars = TRUE)
+```
+-3.)Find other forms of missing values. Hint: You can use the table function to check if there are suspicious categories (Unknown, for example) in a variable. What all other forms of missing values shown in the data.
+```{r}
+colSums(df == 'Missing', na.rm = TRUE)
+```
+-4.)Replace all the forms of missing values found to NA
+
+```{r}
+df <- replace(df, df == 'Unknown' |
+                  df == 'Missing' |
+                  df == 'Not Available', NA)
+```
+
+-5.)Replot the number of NAs for each column.
+```{r}
+aggr(df, col = c( "red", "yellow"), numbers = TRUE, sortVars = TRUE)
+```
+6.)Approach 1 to handle NAs: remove all rows that have any NAs. Save the dataset after removing as a different data. The original data is unchanged (still have NAs). How many rows left after removing?
+```{r}
+df2 = drop_na(df)
+```
+
+7.)Approach 2 to handle NAs: Fill all the NAs with the previous or next value. (Hint: Using fill function). Save the dataset after filling as a different data. The original data is unchanged (still have NAs)
+```{r}
+df3 = df %>% fill(age, sex, .direction = 'updown')
+```
+
+8.)Approach 3 to handle NAs: For numeric variable, replace the NAs by the median. For categorical variables, replace the NAs to the majority.
+```{r}
+df4 = median_age <- median(df$age, na.rm=TRUE)
+df$age <- replace_na(df$age, df4)
+
+```
+
+```{r}
+df5 = majority_sex <- names(which.max(table(df$sex)))
+df$sex <- replace_na(df$sex, majority_sex)
+```
+

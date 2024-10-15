@@ -10,3 +10,6 @@
 [Assignment 4](assignment4R.html)
 
 [Assignment4 Extra Credit](assignment4Extra.html)
+
+[Assignment 5 Part 1](assignment5-part1.html)
+
