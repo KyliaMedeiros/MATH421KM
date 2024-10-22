@@ -1,0 +1,121 @@
+---
+title: "assignment 5 part 2"
+author: "Kylia Medeiros"
+date: "2024-10-22"
+output:
+  html_document: default
+  word_document: default
+---
+```{r}
+library(readxl)
+library(tidyverse)
+df <- read_excel('c2015.xlsx')
+```
+
+-2.)Let’s study the variable SEX. How many missing values in the NAs form?
+```{r}
+colSums(df == 'SEX', na.rm = TRUE)
+
+```
+
+-3.)Still with variable SEX. There are missing values in this variables that are not NAs. Identify the forms of missing values in this variable. Change all the forms of missing values to NAs.
+
+```{r}
+df <- replace(df, df == 'Unknown' |
+                  df == 'Not Rep' |
+                  df == 'Not Available', NA)
+```
+
+-4.)Still with variable SEX. After all the missing values are in the NAs form. Change the missing values of this variable to the majority sex.
+
+```{r}
+majority_sex <-names(which.max(table(df$SEX)))
+df$SEX <- replace_na(df$SEX, majority_sex)
+table(df$SEX)
+```
+
+5.) Let’s study variable AGE. Use the table function to check out the values of these variable and forms of missing values. Use na_if to change all the forms of missing values to NAs.
+```{r}
+df$AGE <- na_if(df$AGE, "")
+df$AGE <- na_if(df$AGE, "N/A")
+table(df$AGE, useNA = "ifany")
+
+```
+-6.) Still with variable AGE. Use the str_replace to replace Less than 1 to ‘0’ (character 0, not number 0).
+```{r}
+df$AGE <- str_replace(df$AGE, "Less than 1", "0")
+table(df$AGE, useNA = "ifany")
+```
+
+-7.)Still with variable AGE. Use the class function to check the type of this variable. Use the as.numeric function to change the type of the variable to numeric.
+```{r}
+class(df$AGE)
+```
+
+```{r}
+df$AGE <- as.numeric(df$AGE)
+class(df$AGE)
+```
+
+-8.)Still with variable AGE. Replace the missing values NAs by the mean of the variable.
+```{r}
+mean_age <- mean(df$AGE, na.rm = TRUE)
+df$AGE[is.na(df$AGE)] <- mean_age
+sum(is.na(df$AGE))
+```
+9. Let's fix the variableTRAV_SP`. Do the follows.
+
+Use the table function to check all the values of this variable. Use the str_remove to remove the MPH in each value.
+```{r}
+table(df$TRAV_SP, useNA = "ifany")
+```
+
+```{r}
+df$TRAV_SP <- str_remove(df$TRAV_SP, "MPH")
+table(df$TRAV_SP, useNA = "ifany")
+```
+
+```{r}
+df <- df %>%
+  filter(TRAV_SP != "Greater") %>%
+  drop_na(TRAV_SP)
+table(df$TRAV_SP, useNA = "ifany")
+```
+
+
+```{r}
+df$TRAV_SP <- str_replace(df$TRAV_SP, "Stopped", "0")
+table(df$TRAV_SP, useNA = "ifany")
+```
+
+```{r}
+df$TRAV_SP <- na_if(df$TRAV_SP, "")
+df$TRAV_SP <- na_if(df$TRAV_SP, "N/A")
+sum(is.na(df$TRAV_SP))
+```
+
+```{r}
+df$TRAV_SP <- as.numeric(df$TRAV_SP)
+class(df$TRAV_SP)
+
+```
+
+```{r}
+median_trav_sp <- median(df$TRAV_SP, na.rm = TRUE)
+df$TRAV_SP <- replace_na(df$TRAV_SP, median_trav_sp)
+```
+
+-10.)Find the correlation between Age of the drivers and Travel speed (TRAV_SP). Hint: You want to look at the seat positions (SEAT_POS variable) to filter out the observations about the drivers, then calculate the correlation.
+```{r}
+cleaned_data <- df %>%
+  mutate(
+    AGE = na_if(AGE, NA),
+    TRAV_SP = na_if(TRAV_SP, NA)) %>%
+  filter(SEAT_POS == "Front Seat, Left Side") %>%
+  drop_na(AGE, TRAV_SP)
+
+cor(cleaned_data$AGE, cleaned_data$TRAV_SP)
+
+
+```
+
