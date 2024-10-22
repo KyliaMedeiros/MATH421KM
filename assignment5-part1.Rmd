@@ -45,8 +45,8 @@ df3 = df %>% fill(age, sex, .direction = 'updown')
 
 8.)Approach 3 to handle NAs: For numeric variable, replace the NAs by the median. For categorical variables, replace the NAs to the majority.
 ```{r}
-df4 = median_age <- median(df$age, na.rm=TRUE)
-df$age <- replace_na(df$age, df4)
+median_age <- median(df$age, na.rm=TRUE)
+df$age <- replace_na(df$age, median_age)
 
 ```
 
