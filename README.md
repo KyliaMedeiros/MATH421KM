@@ -15,3 +15,5 @@
 
 [Assignment 5 Part 2](assignment5.2.html)
 
+[Assignment 6 ](Assignment6.html)
+

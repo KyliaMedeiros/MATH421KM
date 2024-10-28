@@ -53,5 +53,5 @@ df$age <- replace_na(df$age, median_age)
 ```{r}
 df5 = majority_sex <- names(which.max(table(df$sex)))
 df$sex <- replace_na(df$sex, majority_sex)
-```
+
 

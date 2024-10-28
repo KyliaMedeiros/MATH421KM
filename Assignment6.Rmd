@@ -1,0 +1,108 @@
+---
+title: "Assignment6"
+author: "Kylia Medeiros"
+date: "2024-10-24"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+-Choose a dataset and produce the following types of plots and comment on each plot. Plots should be meaningful. If you use the data we used in class, make sure the plots are not the same as the ones in the slides.
+
+-Data set chosen: DS_Salaries
+
+```{r}
+library(ggplot2)
+library(knitr)
+library(tidyverse)
+
+df<-read.csv('ds_salaries.csv')
+```
+
+```{r}
+names(df)
+```
+-For one continuous variable:
+-Density
+
+```{r}
+df %>% ggplot()+
+  geom_density(mapping = aes(x=remote_ratio))
+```
+
+
+Comment: This graph shows insight into the distribution of remote work preferences among respondents. There are two peak which means common preferences for levels of remote work such as full time remote, hybrid remote, in person only etc. Since this is wide it shows a variety of preferences regarding remote work. 
+
+Histogram: 
+```{r}
+df %>% ggplot()+
+  geom_histogram(mapping = aes(x=salary_in_usd))
+```
+Comment: This graph seems to be slightly skewed right. The salary in US dollar had an increase, than it started to decrease.
+
+-Boxplot
+-
+```{r}
+df %>% ggplot()+
+  geom_boxplot(mapping = aes(x=salary_in_usd))
+```
+Comment: The boxplot illustrates the distribution of data scientist salaries, highlighting the spread of the data. The outliers represent individuals earning significantly more than the median, which is approximately $100,000. This doesn't have much of a skew. 
+
+-For one categorical variable
+-Barplot
+
+```{r}
+df %>% ggplot()+
+  geom_bar(mapping = aes(x=remote_ratio))
+```
+Comment: The taller the bar, the more likely it is that individuals prefer or currently work from home. This indicates a dominant preference for remote work arrangements, helping to identify the most favored work setups.
+
+-For two continuous variables
+-Scatter Plot
+```{r}
+df %>% ggplot()+geom_point(aes(x=work_year, y=salary))
+```
+comment: This graph illustrates the relationship between an employee's years of experience and their salary. It appears there is little correlation, suggesting that salary may be influenced by other factors, such as educational qualifications or performance quality.
+
+
+-line plot
+```{r}
+df %>% ggplot()+geom_line(aes(x=work_year, y=salary))
+```
+comment:It appears that employees with one year of experience have the highest salaries, while those just starting receive a decent starting salary. Interestingly, individuals with two years of experience have the lowest salaries, despite their loyalty to the company.
+
+-Smooth Plot
+```{r}
+df %>% ggplot()+geom_smooth(aes(x=work_year, y=salary))
+```
+comment:The smooth graph reveals a notable bump in 2021, indicating higher salaries during that year. There is a slight increase in pay starting in 2020, peaking in 2021. However, as time progresses, salaries begin to decline. This bump may suggest career milestones for individuals working in 2021. Additionally, there does not appear to be a linear relationship between salary and years of experience
+
+-For one continuous + one categorical variables
+-Density
+```{r}
+df %>% ggplot()+
+  geom_density(mapping = aes(x=salary , color=experience_level))
+```
+comment: Each colored curve represents the distribution of salaries for different levels of work experience.
+-Boxplot
+```{r}
+df %>% ggplot()+
+  geom_boxplot(mapping = aes(x=salary , y=employment_type))
+```
+comment:This graph shows how different employee types correspond to varying salaries. While similar roles generally receive comparable pay, there are outliers present, indicating that some individuals in the same roles are earning different salaries
+
+-For two categorical variables: barplot
+```{r}
+df %>% ggplot()+
+  geom_bar(mapping=aes(x=employment_type , fill=experience_level), position = 'fill')
+```
+
+comment: This graph shows the distribution of experience levels within employment types. This allows me to see how many employees at various experience levels are in each employment category.
+
+-A plot that contains three variables
+```{r}
+df %>% ggplot() + geom_point(aes(x=work_year, y=salary, color=experience_level))
+
+```
+comment: This graph shows how salary is influenced by both years of experience and experience level. There is one outlier present in this graph indicating that the person gets paid more despite years of experience.
+ comprehensive view of how salary is influenced by both years of experience and experience level
