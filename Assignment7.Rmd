@@ -5,6 +5,104 @@ date: "2024-10-26"
 output: html_document
 ---
 ```{r}
+library(tidyverse)
+library(knitr)
+library(ggplot2)
+df <- read_csv('ds_salaries.csv')
+```
+
+```{r}
+names(df)
+```
+```{r}
+df
+```
+-Make a plot using facet_wrap by one categorical variable (facet_wrap(~variable1))
+```{r}
+ggplot(df, aes(x = work_year, y = salary)) +
+  geom_point() +
+  facet_wrap(~ experience_level)
+```
+
+
+Comment: (graph above)
+This graph is showing the relationship between work year compared to an employees salary. There seems to be a higher salary for those working in 2021, and a lower salary for those in 2022. There is one outliter present in MI.
+
+```{r}
+ggplot(df, aes(x = work_year, y = salary)) +
+  geom_point() +
+  facet_wrap(~ experience_level + employment_type)
 
 ```
+comment: (graph above)This graph shows how salary varies with work years, split by experience level and employment type. Overall giving insights into the relationship between experience and salary across different categories.
+
+-Make a plot using position ='dodge'.
+```{r}
+df %>% ggplot()+ 
+  geom_bar(mapping=aes(x = work_year , fill = remote_ratio),
+           position = 'dodge')
+```
+
+comment:(graph above)This graph shows the distribution of years worked and how it varies with different remote ratios. This graph is skewed left.
+
+-Make a plot using position ='fill'.
+```{r}
+df %>% ggplot()+ 
+  geom_bar(mapping=aes(x = work_year , fill = remote_ratio), 
+           position = 'fill')
+```
+comment:(graph above) This graph shows how remote work preference vary by work year. Each bar shows the different types of remote work, for different years worked.
+
+
+This graph shows how work year, and remote ratio vary
+
+-Make a plot using geom_col.
+```{r}
+df %>% 
+  ggplot()+ 
+  geom_col(mapping=aes(x = experience_level, y = salary))
+
+```
+comment: This graph shows the relationship between experience level and salary. Each bar on the x-axis represents the different expeirnece levels while the y represents salary. There is no skew in this graph, but alot of variation.
+
+-Change the theme of one of your plots.
+```{r}
+df %>% ggplot()+ 
+  geom_bar(mapping=aes(x = work_year , fill = remote_ratio))+
+theme_dark()
+```
+commment:The graph displays how remote work preferences vary by work year with the dark theme.This graph is skewed left.
+
+
+Make a plot using combo filter + ggplot
+
+```{r}
+df %>%
+  filter(work_year == 2020, remote_ratio == 0)
+```
+```{r}
+  ggplot(df, aes(x = work_year, y = remote_ratio)) +
+  geom_col()
+```
+comment: This graph seems to be skewed left, as the work years go on the remote ratios increase.
+
+-Make a plot using combo group_by + summarise + geom_col
+```{r}
+df %>% 
+  group_by(experience_level) %>%
+  summarise(averageSalary = mean(salary, na.rm=TRUE)) %>% 
+  ggplot()+ 
+  geom_col(mapping=aes(x = experience_level, y = averageSalary))
+```
+-comment: This graph has alot of different variation and a slight skew left, this shows the relationship between average salary and the correlation to experience level.
+
+
+```{r}
+gg <- df %>% 
+  group_by(experience_level) %>%
+  summarise(averageSalary = mean(salary, na.rm=TRUE)) %>% 
+  ggplot()+ 
+  geom_col(mapping=aes(x = experience_level, y = averageSalary))
+```
+
 
