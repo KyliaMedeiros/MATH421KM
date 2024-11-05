@@ -1,0 +1,101 @@
+---
+title: "Assignment8"
+author: "Kylia Medeiros"
+date: "2024-10-31"
+output: html_document
+---
+```{r}
+library(gganimate)
+library(gifski)
+library(tidyverse)
+```
+```{r}
+df <- read_csv('adult_census.csv')
+```
+```{r}
+head(df)
+```
+
+```{r}
+df %>% ggplot(aes(x = income, y = age, color = race)) +
+  geom_point() +
+  transition_states(sex)+
+  labs(title = 'Sex: {Adult Census Income}')
+```
+Using the Adult Census Income data, make an animation using geom_bar and transition_states.
+```{r}
+df %>% 
+  ggplot(aes(x = income, color = age)) +
+  geom_bar() +
+  transition_states(sex)+
+  labs(title = 'Sex: {Adult Census Income}')
+
+```
+Use the WHO’s dataset at this link. Make a top-10 bar race by months between countries on the number of deaths by Covid 19library(gganimate)
+```{r}
+library(gganimate)
+library(tidyverse)
+library(dplyr)
+library(ggplot2)
+library(knitr)
+```
+
+```{r}
+df <- read_csv('WHO-COVID-19-global-data.csv')
+```
+```{r}
+library(lubridate)
+df$week <- week(df$Date_reported)
+
+d1 <- df %>% group_by(week, Country) %>%  summarise(mean = mean(Cumulative_deaths)) 
+
+d2 <- d1 %>% group_by(week) %>%  mutate(rank = rank(-mean))
+
+d3 <- d2 %>% filter(rank <= 10)
+
+a1 <- d3 %>%  ggplot(aes(x = rank, y = mean, group = week, label = Country, color = Country)) + geom_col()+
+  geom_text(aes(y = mean, label = Country), hjust = 1.4)+
+  coord_flip(clip = 'off', expand = FALSE) + scale_x_reverse()+
+  labs(title = 'Country', x = '', y = 'Total Number of Deaths', fill = 'Country') +
+  theme(plot.title = element_text(hjust = 1, size = 22),
+        axis.ticks.y = element_blank(),
+        axis.text.y = element_blank())+
+  transition_states(week)+
+  ease_aes('cubic-in-out')
+
+animate(a1, nframes = 400)
+```
+Make a bar race using a dataset of your own interest. You may use the dataset that we use in class
+```{r}
+df <- read.csv('ds_salaries.csv')
+```
+```{r}
+head(df)
+```
+```{r}
+library(lubridate)
+df$year <- year(df$work_year)
+```
+```{r}
+d1 <- df %>% group_by(year, job_title) %>%  summarise(mean = mean(salary)) 
+
+d2 <- d1 %>% group_by(year) %>%  mutate(rank = rank(-mean))
+
+d3 <- d2 %>% filter(rank <= 10)
+
+a1 <- d3 %>%  ggplot(aes(x = rank, y = mean, group = year, label = job_title, color = job_title)) + geom_col()+
+  geom_text(aes(y = mean, label = job_title), hjust = 1.4)+
+  coord_flip(clip = 'off', expand = FALSE) + scale_x_reverse()+
+  labs(title = 'Job Title', x = '', y = 'Salary', fill = 'job_title') +
+  theme(plot.title = element_text(hjust = 1, size = 22),
+        axis.ticks.y = element_blank(),
+        axis.text.y = element_blank())+
+  transition_states(year)+
+  ease_aes('cubic-in-out')
+
+animate(a1, nframes = 400)
+```
+
+
+
+
