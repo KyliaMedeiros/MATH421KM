@@ -1,0 +1,103 @@
+---
+title: "assignment 12"
+author: "Kylia Medeiros"
+date: "2024-11-11"
+output: html_document
+---
+```{r}
+library(mlbench)
+library(tidyverse)
+library(caret)
+data(PimaIndiansDiabetes)
+df <- tibble(PimaIndiansDiabetes)
+```
+
+```{r}
+df <- df %>% rename(target=diabetes)
+df <- df %>%
+  mutate(target = as.factor(target))
+```
+
+```{r}
+splitIndex <- createDataPartition(df$target, p = .70, 
+                                  list = FALSE)
+df_train <- df[ splitIndex,]
+df_test <- df[-splitIndex,]
+```
+
+
+```{r}
+library(randomForest)
+getModelInfo('ranger')$ranger$parameters
+```
+```{r}
+trControl = trainControl(method = "cv",
+                         number = 7)
+tuneGrid = expand.grid(mtry = 2:4,
+                       splitrule = c('gini', 'extratrees'),
+                       min.node.size = c(1:10))
+forest_ranger <- train(target~., data=df_train, 
+                    method = "ranger", 
+                    trControl = trControl,
+                    tuneGrid = tuneGrid)
+```
+
+
+```{r}
+trControl = trainControl(method = "cv",
+                         number = 7)
+tuneGrid = expand.grid(mtry = 2:4,
+                       splitrule = c('gini', 'extratrees'),
+                       min.node.size = c(1:10))
+forest_ranger <- train(target~., data=df_train, 
+                    method = "ranger", 
+                    trControl = trControl,
+                    tuneGrid = tuneGrid)
+```
+
+```{r}
+pred <- predict(forest_ranger, df_test)
+cm <- confusionMatrix(data = pred, reference = df_test$target, positive = "pos")
+cm$overall[1]
+```
+```{r}
+pred <- predict(forest_ranger, df_test)
+cm <- confusionMatrix(data = pred, reference = df_test$target, positive = "pos")
+cm$overall[1]
+```
+```{r}
+trControl = trainControl(method = "cv",
+                         number = 7)
+fda <- train(target~., data=df_train, 
+                                method = "fda", 
+                                trControl = trControl)
+ada <- train(target~., data=df_train, 
+                                method = "ada", 
+                                trControl = trControl)
+results <- resamples(list('Fda' = fda,
+                          'Ada'= ada))
+bwplot(results)
+```
+```{r}
+tuneGrid = expand.grid(maxdepth = 2:10)
+trControl = trainControl(method = "cv",
+                         number = 7)
+tree_approach2 <- train(target~., data=df_train, 
+                                method = "lda", 
+                                trControl = trControl)
+```
+
+
+```{r}
+library(caret)
+pred <- predict(tree_approach2, df_test)
+cm <- confusionMatrix(data = pred, reference = df_test$target, positive = "pos")
+cm$overall[1]
+```
+```{r}
+library(ada)
+ada_model <- ada(target ~ ., data = df_train)  # Assuming df_train is your training data
+pred <- predict(ada_model, df_test)
+cm <- confusionMatrix(data = pred, reference = df_test$target, positive = "pos")
+cm$overall[1]
+```
