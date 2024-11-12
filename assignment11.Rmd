@@ -1,0 +1,122 @@
+Assignment 11 
+Kylia Medeiros 
+
+```{r}
+library(mlbench)
+library(tidyverse)
+data(PimaIndiansDiabetes)
+df <- tibble(PimaIndiansDiabetes)
+```
+
+```{r}
+names(df)
+```
+```{r}
+df <- df %>% 
+  select(-pedigree, -triceps, -pressure, -glucose)
+```
+
+```{r}
+df <- df %>% 
+  rename(target = diabetes)
+```
+
+```{r}
+df <- df %>% 
+  mutate(target = as.factor(target))
+```
+
+```{r}
+library(caret)
+df$age[is.na(df$age)] = mean(df$age, na.rm = TRUE)
+splitIndex <- createDataPartition(df$target, p = .70, 
+                                  list = FALSE)
+df_train <- df[ splitIndex,]
+df_test <- df[ splitIndex,]
+```
+
+```{r}
+model1 <- train(target~., data=df_train, 
+                method = "rpart2",
+                maxdepth=3)
+
+pred <- predict(model1, df_test)
+
+cm <- confusionMatrix(data = pred, reference = df_test$target, positive = "pos")
+
+cm$overall[1]
+```
+```{r}
+varImp(model1)
+```
+```{r}
+plot(varImp(model1))
+```
+```{r}
+model2 <- train(target~., data=df_train, 
+                method = "rf",
+                ntree = 1000) 
+pred <- predict(model2, df_test)
+cm <- confusionMatrix(data = pred, reference = df_test$target, positive = "pos")
+cm$overall[1]
+```
+
+```{r}
+varImp(model2)
+```
+```{r}
+plot(varImp(model2))
+```
+```{r}
+library('glmnet')
+df$age[is.na(df$age)] = mean(df$age, na.rm = TRUE)
+splitIndex <- createDataPartition(df$target, p = .70, 
+                                  list = FALSE)
+df_train <- df[ splitIndex,]
+df_test <- df[ splitIndex,]
+
+model1 <- train(target~., data=df_train, 
+                method = "glmnet")
+
+pred <- predict(model1, df_test)
+
+cm <- confusionMatrix(data = pred, reference = df_test$target, positive = "pos")
+
+cm$overall[1]
+```
+```{r}
+varImp(model1)
+```
+
+```{r}
+plot(varImp(model1))
+```
+```{r}
+library('ada')
+df$age[is.na(df$age)] = mean(df$age, na.rm = TRUE)
+splitIndex <- createDataPartition(df$target, p = .70, 
+                                  list = FALSE)
+df_train <- df[ splitIndex,]
+df_test <- df[ splitIndex,]
+
+model1 <- train(target~., data=df_train, 
+                method = "ada")
+
+pred <- predict(model1, df_test)
+
+cm <- confusionMatrix(data = pred, reference = df_test$target, positive = "pos")
+
+cm$overall[1]
+```
+```{r}
+library('hda')
+df$age[is.na(df$age)] = mean(df$age, na.rm = TRUE)
+splitIndex <- createDataPartition(df$target, p = .70, 
+                                  list = FALSE)
+df_train <- df[ splitIndex,]
+df_test <- df[ splitIndex,]
+
+model1 <- train(target~., data=df_train, 
+                method = "hda")
+```
+
