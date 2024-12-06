@@ -9,9 +9,11 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
+<meta name="author" content="Kylia Medeiros" />
 
+<meta name="date" content="2024-12-06" />
 
-<title>README</title>
+<title>part 2</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -348,31 +350,113 @@ display: none;
 
 
 
+<h1 class="title toc-ignore">part 2</h1>
+<h4 class="author">Kylia Medeiros</h4>
+<h4 class="date">2024-12-06</h4>
 
 </div>
 
 
-<div id="math421km" class="section level1">
-<h1>Math421KM</h1>
-</div>
-<div id="kylia-medeiros" class="section level1">
-<h1>Kylia Medeiros</h1>
-<p><a href="Assignment1_StatsR.html">Assignment 1</a></p>
-<p><a href="assignment2R.html">Assignment 2</a></p>
-<p><a href="assignment3Rkredo.html">Assignment 3 Redo</a></p>
-<p><a href="assignment4R.html">Assignment 4</a></p>
-<p><a href="assignment4Extra.html">Assignment4 Extra Credit</a></p>
-<p><a href="assignment5-part1.html">Assignment 5 Part 1</a></p>
-<p><a href="assignment5.2.html">Assignment 5 Part 2</a></p>
-<p><a href="Assignment6.html">Assignment 6</a></p>
-<p><a href="Assignment7.html">Assignment 7</a></p>
-<p><a href="Assignment8-KM.html">Assignment 8</a></p>
-<p><a href="Assignment9.html">Assignment 9</a></p>
-<p><a href="Assignment10-KM.html">Assignment 10</a></p>
-<p><a href="assignment11.html">Assignment 11</a></p>
-<p><a href="assignment12.html">Assignment 12</a></p>
-<p><a href="midterm_toc.html">Midterm-R</a></p>
-</div>
+<pre class="r"><code>library(gganimate)</code></pre>
+<pre><code>## Warning: package &#39;gganimate&#39; was built under R version 4.3.3</code></pre>
+<pre><code>## Loading required package: ggplot2</code></pre>
+<pre><code>## Warning: package &#39;ggplot2&#39; was built under R version 4.3.3</code></pre>
+<pre class="r"><code>library(ggplot2)
+library(tidyverse)</code></pre>
+<pre><code>## Warning: package &#39;tidyverse&#39; was built under R version 4.3.3</code></pre>
+<pre><code>## Warning: package &#39;tibble&#39; was built under R version 4.3.3</code></pre>
+<pre><code>## Warning: package &#39;tidyr&#39; was built under R version 4.3.3</code></pre>
+<pre><code>## Warning: package &#39;readr&#39; was built under R version 4.3.3</code></pre>
+<pre><code>## Warning: package &#39;purrr&#39; was built under R version 4.3.3</code></pre>
+<pre><code>## Warning: package &#39;forcats&#39; was built under R version 4.3.3</code></pre>
+<pre><code>## Warning: package &#39;lubridate&#39; was built under R version 4.3.3</code></pre>
+<pre><code>## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+## ✔ dplyr     1.1.4     ✔ readr     2.1.5
+## ✔ forcats   1.0.0     ✔ stringr   1.5.1
+## ✔ lubridate 1.9.3     ✔ tibble    3.2.1
+## ✔ purrr     1.0.2     ✔ tidyr     1.3.1</code></pre>
+<pre><code>## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+## ✖ dplyr::filter() masks stats::filter()
+## ✖ dplyr::lag()    masks stats::lag()
+## ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+<pre class="r"><code>library(haven)</code></pre>
+<pre><code>## Warning: package &#39;haven&#39; was built under R version 4.3.3</code></pre>
+<pre class="r"><code>library(dplyr)</code></pre>
+<pre class="r"><code>df = read_sas(&#39;hdd0318cy.sas7bdat&#39;)</code></pre>
+<ol start="2" style="list-style-type: upper-roman">
+<li>Data Visualization Continue with the data from part I.</li>
+</ol>
+<p>Provides at least 10 meaningful plots. Comments on the plots. All
+plots should have title, caption, appropriate labels on x and y-axis</p>
+<pre class="r"><code>df %&gt;% 
+  ggplot() +
+  geom_bar(mapping=aes(x = sex, fill = moa),
+  position = &#39;dodge&#39;)+
+  labs(title = &quot;Seasonal Admissions&quot;, x = &quot;Sex&quot;, y = &quot;Number of Admissions&quot;)</code></pre>
+<pre class="r"><code>df1 %&gt;% 
+  ggplot() +
+  geom_bar(mapping=aes(x = race, fill = sex),
+  position = &#39;fill&#39;)+
+  labs(title = &quot;Seasonal Admissions: Based on Race&quot;, x = &quot;Season&quot;, y = &quot;Number of Admissions&quot;)</code></pre>
+<pre class="r"><code>ggplot(df1, aes(x = provider)) +
+  geom_bar(fill = &quot;blue&quot;, color = &quot;red&quot;) +
+  labs(title = &quot;Provider Frequency&quot;, x = &quot;Provider&quot;, y = &quot;Frequency&quot;)+
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))</code></pre>
+<pre class="r"><code>df1 %&gt;%
+  ggplot(aes(x = age)) +
+  geom_histogram(binwidth = 5) +
+  labs(title = &quot;Age Distribution by Race&quot;, x = &quot;Age&quot;, y = &quot;Count&quot;) +
+  facet_wrap(~race)</code></pre>
+<pre class="r"><code>df1 %&gt;% 
+  ggplot() +
+  geom_point(aes(x = age, y = los, color = sex)) +
+  labs(title = &quot;Age vs. Length of Stay&quot;, x = &quot;Age&quot;, y = &quot;Length of Stay (Days)&quot;)</code></pre>
+<pre class="r"><code>df1 %&gt;% 
+ggplot(aes(x = moa, y = los)) +
+  geom_boxplot(fill = &quot;blue&quot;) +
+  labs(title = &quot;Length of Stay by Season&quot;, x = &quot;Season&quot;, y = &quot;Length of Stay (Days)&quot;)</code></pre>
+<pre class="r"><code>df1 %&gt;% 
+  ggplot() +
+  geom_point(aes(x = age, y = icu, color = sex)) +
+  labs(title = &quot;Age vs. ICU Days&quot;, x = &quot;Age&quot;, y = &quot;ICU (Days)&quot;)</code></pre>
+<pre class="r"><code>df1 %&gt;% 
+  ggplot() +
+  geom_point(aes(x = age, y = total, color = sex)) +
+  labs(title = &quot;Age vs. Total Charges&quot;, x = &quot;Age&quot;, y = &quot;Total Charges&quot;)</code></pre>
+<pre class="r"><code>df1 %&gt;% 
+  ggplot()+
+  geom_smooth(aes(x = los, y = total))+
+   labs(title = &quot;Length of Stay vs. Total Charges&quot;, x = &quot;Length of Stay&quot;, y = &quot;Total Charges&quot;)</code></pre>
+<pre class="r"><code>df1 %&gt;% 
+  ggplot() +
+  geom_bar(mapping=aes(x = admtype, fill = sex),
+  position = &#39;dodge&#39;)+
+  labs(title = &quot;Admission Type per Sex&quot;, x = &quot;Admission Type&quot;, y = &quot;Number of Admissions&quot;)+
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))</code></pre>
+<p>2.) Make an animation plot.</p>
+<pre class="r"><code>library(gganimate)
+g &lt;- ggplot(df1, 
+       aes(x = race, 
+           y = los, 
+           fill = sex))+
+  geom_col() + 
+  transition_states(moa)+
+labs(title = &#39;Season: {closest_state}&#39;)
+animate(g)</code></pre>
+<p>3.)Write a paragraph to summarize the section and give your comments
+on the results. -The analysis reveals the female patients had the higher
+admission across all seasons, especially in Spring and Summer, with
+Asian and American Indian women leading admissions rates. Rhode Island
+hospital handled the most cases likely due to broad services while
+smaller providers such as Bradley and Butler had fewer patients due to
+their specific personalized care.<br />
+Admissions were influenced by age, with White individuals aged between
+60-90 dominating and infants (age 0) being the notable outliers. The
+length of stay ranged between 50-100 days, but middle aged patients had
+more extended stays and charges were more influenced by stage duration
+than age. The ICU admissions were the highest for those aged 60-90 days
+evenly split between males and females. These trends can help provide
+better allocated resources and plan for peak demand periods.</p>
 
 
 

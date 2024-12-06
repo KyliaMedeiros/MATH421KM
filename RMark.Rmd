@@ -1,0 +1,39 @@
+---
+title: "RMark"
+author: "Kylia Medeiros"
+date: "2024-12-05"
+output: html_document
+---
+
+```{r}
+library(gganimate)
+library(ggplot2)
+library(tidyverse)
+library(haven)
+```
+
+Part 1- Data Wranggling 
+
+1.)Download the data file hdd0318cy.sas7bdat.
+
+2.)Use read_sas in library haven to read the data.
+```{r, eval=FALSE}
+library(haven)
+df <-read_sas('hdd0318cy.sas7bdat')
+raw_data=df
+n=nrow(df)
+print(raw_data)
+```
+
+```{r}
+names(df)
+```
+
+3.) Filter the data to have only patients of the year 2018 (yod=18)
+```{r}
+df1 = raw_data %>% 
+  filter(yod==18)
+```
+
+4.) Select to work with only following variables:
+

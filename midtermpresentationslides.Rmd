@@ -1,0 +1,38 @@
+---
+title: "Midterm Presentation Math 421"
+author: "Kylia Medeiros"
+date: "2024-11-26"
+output:
+  ioslides_presentation: default
+  slidy_presentation: default
+---
+
+## Graph 1
+
+![](graph1.png)
+
+## Graph 2
+
+![](graph2.png)
+
+##Graph 3
+![](graph3.png)
+
+##Graph 4 
+![](graph 4.png)
+##Graph 5 
+![](graph 5.png)
+
+
+##Graph 6 
+![](graph 6.png)
+##Graph 7 
+![](graph7.png)
+##Graph 8 
+![](graph8.png)
+
+##Graph 9 
+![](graph9.png)
+
+##Graph 10 
+![](graph10.png)

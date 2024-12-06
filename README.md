@@ -1,3 +1,8 @@
+---
+output:
+  html_document: default
+  pdf_document: default
+---
 # Math421KM
 # Kylia Medeiros
 
@@ -28,5 +33,5 @@
 [Assignment 11](assignment11.html)
 
 [Assignment 12](assignment12.html)
-
-
+ 
+[Midterm-R](midterm_toc.html)
