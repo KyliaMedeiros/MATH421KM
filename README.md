@@ -32,3 +32,5 @@
  
 [Midterm-R](midterm_toc.html)
 
+[Midterm-Slides](SlidesKM.html)
+
