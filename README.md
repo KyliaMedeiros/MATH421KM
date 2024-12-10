@@ -1,9 +1,5 @@
----
-output:
-  html_document: default
-  pdf_document: default
----
 # Math421KM
+
 # Kylia Medeiros
 
 [Assignment 1](Assignment1_StatsR.html)
