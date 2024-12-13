@@ -1,0 +1,12 @@
+name: question5km
+title: question5km
+username: kyliamedeirosfinal
+account: kyliamedeirosfinal
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 13589478
+bundleId: 9513227
+url: https://kyliamedeirosfinal.shinyapps.io/question5km/
+version: 1
+asMultiple: FALSE
+asStatic: FALSE

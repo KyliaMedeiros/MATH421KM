@@ -1,0 +1,140 @@
+---
+title: "Final Kylia Medeiros"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+library(tidyverse)
+library(plotly)
+library(knitr)
+library(DT)
+df <- read_csv('Store_CA.csv')
+
+
+# Create a ggplot object
+p <- df %>% 
+  mutate(PromotionsCount = factor(PromotionsCount)) %>% 
+  ggplot()+ 
+  geom_bar(mapping=aes(x=StoreLocation, fill=EconomicIndicator), 
+           position = 'fill')+
+  labs(y='Proportion', fill='Economic Indicator')
+
+p1 <- df %>% 
+  mutate(PromotionsCount = factor(PromotionsCount)) %>% 
+  ggplot()+ 
+  geom_density(mapping=aes(x=MarketingSpend, color=EconomicIndicator))+
+  facet_wrap(~StoreSize)
+ labs(x = 'Marketing Spend', y = 'Density', color = 'Economic Indicator') +
+  theme_minimal()
+```
+
+{.sidebar}
+Column {data-width=650}
+-----------------------------------------------------------------------
+
+### 1. Retail Store Performance
+
+KPI’s are key performance indicators, this dataset is a collection for retail stores which offers insights into factors including store performance, customer engagement, and financial outcomes. This helps understand the relationship between operational performance, store characteristics, and sales performance.
+
+### 2. Flexdashboard and Plotly
+
+This interactive uses `flexdashboard` and `plotly` to visualize the data. 
+
+Main Tab 1
+
+Column {data-width=350}
+-----------------------------------------------------------------------
+
+### Column Tab 1
+
+```{r}
+names(df)
+```
+
+### Column Tab 2
+
+```{r}
+kable(df)
+```
+
+
+### Column Tab 3
+```{r}
+datatable(df, options = list(
+  pageLength = 25
+))
+```
+
+Column {data-width=500}
+-----------------------------------------------------------------------
+### Row 1
+
+```{r}
+p
+```
+
+### Row 2
+
+```{r}
+ggplotly(p)
+```
+
+Main Tab 2
+=======================================================================
+
+Column {data-width=500}
+-----------------------------------------------------------------------
+#### 1. Plotly for R
+
+Plotly is an R package for creating interactive web-based graphs via plotly's JavaScript graphing library, plotly.js.
+
+The plotly R package serializes ggplot2 figures into Plotly's universal graph JSON. plotly::ggplotly will crawl the ggplot2 figure, extract and translate all of the attributes of the ggplot2 figure into JSON (the colors, the axes, the chart type, etc), and draw the graph with plotly.js. Furthermore, you have the option of manipulating the Plotly object with the style function.
+
+#### 2. Cutomizing the Layout
+
+Since the ggplotly() function returns a plotly object, we can manipulate that object in the same way that we would manipulate any other plotly object. A simple and useful application of this is to specify interaction modes, like plotly.js' layout.dragmode for specifying the mode of click+drag events.
+
+
+```{r, echo=TRUE, eval=TRUE}
+library(plotly)
+library(ggplot2)
+
+
+df <- data.frame(
+  CustomerFootfall = c(100, 200, 150, 300),
+  StoreSize = c(500, 700, 600, 800),
+  StoreLocation = c('Urban', 'Urban', 'Suburban', 'Rural')
+)
+
+p <- ggplot(data = df, aes(x = CustomerFootfall, y = StoreSize, colour = StoreLocation)) + 
+  geom_point(size = 3) +
+  labs(
+    x = "Customer Footfall",
+    y = "Store Size",
+    colour = "Store Location",
+    title = "Customer Footfall vs Store Size"
+  ) +
+  theme_minimal()
+
+ggplotly(p)
+
+```
+Column {data-width=500}
+-----------------------------------------------------------------------
+
+### Row 1
+
+```{r}
+p1
+```
+
+### Row 2
+
+```{r}
+ggplotly(p1)
+```
+

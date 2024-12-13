@@ -1,0 +1,72 @@
+
+---
+title: "Retail Store Performance - Radio Button"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+    logo: logo.png
+    source_code: embed
+    social: menu
+
+runtime: shiny
+---
+
+```{r global, include=FALSE}
+# load data in 'global' chunk so it can be shared by all users of the dashboard
+library(flexdashboard)
+library(tidyverse)
+library(plotly)
+library(knitr)
+library(DT)
+df <- read_csv('Store_CA.csv')
+df$StoreLocation = factor(df$StoreLocation)
+unique_storelocation <-unique(df$StoreLocation)
+
+
+titanic_sex <- unique(df$Sex)
+```
+
+{.sidebar}
+=======================================================================
+
+KPI’s are key performance indicators, this dataset is a collection for retail stores which offers insights into factors including store performance, customer engagement, and financial outcomes. This helps understand the relationship between operational performance, store characteristics, and sales performance.
+
+```{r}
+radioButtons(inputId = "CustomerFootfall_input", 
+             label = h2("Select Customer Footfall Category"),
+             choices = c(1,2,3),
+             inline = TRUE,
+             selected = 1)
+```
+
+Main Tab 1
+=======================================================================
+
+Column {data-width=500}
+-----------------------------------------------------------------------
+
+### Density Plot
+
+```{r}
+renderPlotly({
+  p1 <- df %>% 
+    ggplot(aes(x=EmployeeEfficiency, color=StoreAge))+
+    geom_density()
+  ggplotly(p1)
+})
+```
+
+Column {data-width=500}
+-----------------------------------------------------------------------
+
+### Bar Plot
+
+```{r}
+renderPlotly({
+  p2 <- df %>% 
+    ggplot(aes(x=ProductVariety, fill=PromotionsCount))+
+    geom_bar()
+  ggplotly(p2)
+})
+```

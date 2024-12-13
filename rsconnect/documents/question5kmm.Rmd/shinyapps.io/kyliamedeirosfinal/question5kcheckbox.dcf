@@ -1,0 +1,12 @@
+name: question5kcheckbox
+title: question5kcheckbox
+username: kyliamedeirosfinal
+account: kyliamedeirosfinal
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 13589968
+bundleId: 9513864
+url: https://kyliamedeirosfinal.shinyapps.io/question5kcheckbox/
+version: 1
+asMultiple: FALSE
+asStatic: FALSE
